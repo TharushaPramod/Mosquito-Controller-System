@@ -1,0 +1,3 @@
+mosquito-app/node_modules
+mosquito-backend/node_modules
+.env
