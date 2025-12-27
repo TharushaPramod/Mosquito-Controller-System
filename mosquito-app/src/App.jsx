@@ -1,23 +1,23 @@
-import React from 'react'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Dashboard from './pages/Dashboard';
+import SignUp from './pages/SignUp';
+import Login from './pages/Login';
+import DataIntegration from './pages/DataIntegration';
+import FacilityDetail from './pages/FacilityDetail';
 
 function App() {
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="p-10 bg-white shadow-xl rounded-2xl text-center">
-        <h1 className="text-4xl font-bold text-blue-600 mb-4">
-          Tailwind Working! 🚀
-        </h1>
-
-        <p className="text-gray-700 text-lg">
-          If you can see blue text and a centered card, Tailwind is installed correctly.
-        </p>
-
-        <button className="mt-6 px-6 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition">
-          Test Button
-        </button>
-      </div>
-    </div>
-  )
+    <Router>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/data-integration" element={<DataIntegration />} />
+        <Route path="/facility/:id" element={<FacilityDetail />} />
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
