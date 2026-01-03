@@ -5,6 +5,7 @@ import SignUp from './pages/SignUp';
 import Login from './pages/Login';
 import DataIntegration from './pages/DataIntegration';
 import FacilityDetail from './pages/FacilityDetail';
+import MosquitoDashboard from './pages/MosquitoDashboard';
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/data-integration" element={<DataIntegration />} />
         <Route path="/facility/:id" element={<FacilityDetail />} />
+        <Route path='/mosquito-dashboard' element={<MosquitoDashboard />} />
+
+
       </Routes>
     </Router>
   );
