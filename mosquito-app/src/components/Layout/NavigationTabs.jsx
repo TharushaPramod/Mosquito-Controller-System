@@ -27,8 +27,8 @@ const NavigationTabs = () => {
     const activeItem = getActiveItem();
 
     return (
-        <div className="bg-[#F0F7F5] px-8 border-b border-[#2F6A5F]/10">
-            <div className="flex justify-center gap-8">
+        <div className="bg-[#F0F7F5] px-6 border-b border-[#2F6A5F]/5">
+            <div className="flex justify-center gap-10">
                 {menuItems.map((item) => {
                     const isActive = activeItem === item.label;
                     return (
@@ -36,14 +36,18 @@ const NavigationTabs = () => {
                             key={item.label}
                             onClick={() => navigate(item.path)}
                             className={clsx(
-                                "flex items-center gap-2 px-1 py-4 border-b-2 transition-all duration-300 font-medium text-sm relative",
+                                "flex items-center gap-2.5 px-1 py-4 border-b-2 transition-all duration-300 relative group",
                                 isActive
                                     ? "border-[#2F6A5F] text-[#2F6A5F]"
-                                    : "border-transparent text-[#4A635F] hover:text-[#2F6A5F] hover:border-[#2F6A5F]/30"
+                                    : "border-transparent text-gray-400 hover:text-[#2F6A5F]"
                             )}
                         >
-                            <item.icon size={18} className={isActive ? "text-[#2F6A5F]" : "text-[#4A635F]"} />
-                            <span>{item.label}</span>
+                            <item.icon size={16} className={clsx("transition-colors", isActive ? "text-[#2F6A5F]" : "text-gray-300 group-hover:text-[#2F6A5F]")} />
+                            <span className="text-[11px] font-bold uppercase tracking-wider">{item.label}</span>
+
+                            {!isActive && (
+                                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-[#2F6A5F]/30 group-hover:w-full transition-all duration-300 rounded-full" />
+                            )}
                         </button>
                     );
                 })}

@@ -182,15 +182,15 @@ const DataIntegration = () => {
 
     const renderPastOutbreak = () => {
         return (
-            <div className="flex flex-col gap-8">
+            <div className="flex flex-col gap-6">
                 {/* Outbreak Filter Panel */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-5 bg-white p-6 rounded-2xl border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-white p-4 rounded-xl border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
                     <div className="flex flex-col gap-2 min-w-0">
-                        <label className="text-[13px] font-semibold text-[#4A635F] uppercase tracking-[0.5px]">District</label>
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">District</label>
                         <div className="relative">
-                            <button className="flex items-center justify-between w-full px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}>
                                 <span>{selectedDistrict}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isDistrictDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1 max-h-48 overflow-y-auto">
@@ -203,11 +203,11 @@ const DataIntegration = () => {
                     </div>
 
                     <div className="flex flex-col gap-2 min-w-0">
-                        <label className="text-[13px] font-semibold text-[#4A635F] uppercase tracking-[0.5px]">Disease Type</label>
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Disease Type</label>
                         <div className="relative">
-                            <button className="flex items-center justify-between w-full px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDiseaseDropdownOpen(!isDiseaseDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDiseaseDropdownOpen(!isDiseaseDropdownOpen)}>
                                 <span>{selectedDisease}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isDiseaseDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -220,20 +220,20 @@ const DataIntegration = () => {
                     </div>
 
                     <div className="flex flex-col gap-2 min-w-0">
-                        <label className="text-[13px] font-semibold text-[#4A635F] uppercase tracking-[0.5px]">Date Range</label>
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Date Range</label>
                         <div className="flex items-center gap-2 flex-nowrap">
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="flex-1 min-w-0 px-2.5 py-2 border border-[#E0E0E0] rounded-lg text-[13px] text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
-                            <span className="text-sm">to</span>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="flex-1 min-w-0 px-2.5 py-2 border border-[#E0E0E0] rounded-lg text-[13px] text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="flex-1 min-w-0 px-2 py-1.5 border border-[#E0E0E0] rounded-lg text-[11px] font-medium text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
+                            <span className="text-xs text-gray-400">to</span>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="flex-1 min-w-0 px-2 py-1.5 border border-[#E0E0E0] rounded-lg text-[11px] font-medium text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-2 min-w-0">
-                        <label className="text-[13px] font-semibold text-[#4A635F] uppercase tracking-[0.5px]">Severity</label>
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Severity</label>
                         <div className="relative">
-                            <button className="flex items-center justify-between w-full px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSeverityDropdownOpen(!isSeverityDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSeverityDropdownOpen(!isSeverityDropdownOpen)}>
                                 <span>{selectedSeverity}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isSeverityDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -246,11 +246,11 @@ const DataIntegration = () => {
                     </div>
 
                     <div className="flex flex-col gap-2 min-w-0">
-                        <label className="text-[13px] font-semibold text-[#4A635F] uppercase tracking-[0.5px]">Source</label>
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Source</label>
                         <div className="relative">
-                            <button className="flex items-center justify-between w-full px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSourceDropdownOpen(!isSourceDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSourceDropdownOpen(!isSourceDropdownOpen)}>
                                 <span>{selectedSource}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isSourceDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -268,32 +268,32 @@ const DataIntegration = () => {
                     <table className="w-full border-collapse text-left">
                         <thead className="bg-[#99C7B6]">
                             <tr>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Outbreak ID</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">District</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Start Date</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">End Date</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Total Reported Cases</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Severity Rating</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Download Report</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Outbreak ID</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">District</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Start Date</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">End Date</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Reported Cases</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Severity</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredOutbreaks.map((ob) => (
                                 <tr key={ob.id}>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-mono">{ob.id}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.district}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.startDate}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.endDate}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-bold">{ob.cases}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
-                                        <span className={`px-[14px] py-[6px] rounded-full text-[12px] font-semibold inline-block ${getSeverityClass(ob.severity)}`}>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-mono">{ob.id}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-medium">{ob.district}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.startDate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.endDate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-bold">{ob.cases}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${getSeverityClass(ob.severity)}`}>
                                             {ob.severity}
                                         </span>
                                     </td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
-                                        <button className="flex items-center gap-1.5 px-4 py-2 bg-[#F1F1F1] text-[#1A3D37] border border-[#E0E0E0] rounded-lg text-[12px] font-semibold cursor-pointer transition-all duration-200 hover:bg-[#2D6A5D] hover:text-white hover:border-[#2D6A5D]">
-                                            <Download size={16} />
-                                            <span>PDF</span>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#1A3D37] border border-[#E0E0E0] rounded-lg text-[10px] font-bold cursor-pointer transition-all duration-200 hover:bg-[#2D6A5D] hover:text-white hover:border-[#2D6A5D] shadow-sm">
+                                            <Download size={12} />
+                                            <span>EXCEL</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -303,11 +303,11 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Visual Analysis Section */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="bg-white rounded-2xl p-6 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
-                        <div className="flex items-center gap-3 mb-5">
-                            <FileText size={18} className="text-teal-600" />
-                            <h4 className="m-0 text-base font-semibold text-[#1A3D37]">Outbreak Timeline Graph</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                        <div className="flex items-center gap-2 mb-4">
+                            <FileText size={16} className="text-teal-600" />
+                            <h4 className="m-0 text-xs font-bold text-[#1A3D37] uppercase tracking-wider">Outbreak Timeline Graph</h4>
                         </div>
                         <div className="w-full">
                             <ResponsiveContainer width="100%" height={250}>
@@ -322,10 +322,10 @@ const DataIntegration = () => {
                         </div>
                     </div>
 
-                    <div className="bg-white rounded-2xl p-6 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
-                        <div className="flex items-center gap-3 mb-5">
-                            <Calendar size={18} className="text-teal-600" />
-                            <h4 className="m-0 text-base font-semibold text-[#1A3D37]">Seasonal Trend Line (Yearly)</h4>
+                    <div className="bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Calendar size={16} className="text-teal-600" />
+                            <h4 className="m-0 text-xs font-bold text-[#1A3D37] uppercase tracking-wider">Seasonal Trend Line (Yearly)</h4>
                         </div>
                         <div className="w-full">
                             <ResponsiveContainer width="100%" height={250}>
@@ -354,14 +354,14 @@ const DataIntegration = () => {
         return (
             <>
                 {/* Filters and Search */}
-                <div className="flex items-center gap-4 mb-6 w-full">
+                <div className="flex items-center gap-3 mb-5 w-full">
                     <div className="relative">
                         <button
-                            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
+                            className="flex items-center gap-2 px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
                             onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}
                         >
-                            <span>{selectedDistrict === 'All' ? 'Filter By District' : selectedDistrict}</span>
-                            <ChevronDown size={16} />
+                            <span>{selectedDistrict === 'All' ? 'Filter District' : selectedDistrict}</span>
+                            <ChevronDown size={12} />
                         </button>
                         {isDistrictDropdownOpen && (
                             <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-2 max-h-60 overflow-y-auto">
@@ -382,11 +382,11 @@ const DataIntegration = () => {
                     </div>
 
                     <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#666]" size={18} />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" size={14} />
                         <input
                             type="text"
-                            className="w-full pl-11 pr-4 py-2.5 bg-white border border-[#E0E0E0] rounded-full text-sm outline-none transition-colors duration-200 focus:border-[#1A3D37]"
-                            placeholder="Search Here"
+                            className="w-full pl-9 pr-4 py-2 bg-white border border-[#E0E0E0] rounded-lg text-xs outline-none transition-colors duration-200 focus:border-[#1A3D37]"
+                            placeholder="Search facility..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -394,11 +394,11 @@ const DataIntegration = () => {
 
                     <div className="relative">
                         <button
-                            className="flex items-center gap-2 px-4 py-2.5 bg-white border border-[#E0E0E0] rounded-xl text-[#1A3D37] text-sm font-medium cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
+                            className="flex items-center gap-2 px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
                             onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
                         >
-                            <span>{selectedStatus === 'All' ? 'Filter By Status' : selectedStatus}</span>
-                            <ChevronDown size={16} />
+                            <span>{selectedStatus === 'All' ? 'Filter Status' : selectedStatus}</span>
+                            <ChevronDown size={12} />
                         </button>
                         {isStatusDropdownOpen && (
                             <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-2">
@@ -420,14 +420,14 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mb-4">
-                    <button className="bg-[#00796B] text-white border-none px-5 py-2.5 rounded-xl font-medium text-sm cursor-pointer transition-opacity duration-200 hover:opacity-90">
-                        <Plus size={18} className="inline-block mr-2 align-middle" />
-                        Add New Facility
+                <div className="flex justify-end gap-2 mb-4">
+                    <button className="bg-[#00796B] text-white border-none px-4 py-2 rounded-lg font-bold text-xs cursor-pointer transition-opacity duration-200 hover:opacity-90 shadow-sm">
+                        <Plus size={14} className="inline-block mr-1.5 align-middle" />
+                        Add Facility
                     </button>
-                    <button className="bg-transparent border border-[#1A3D37] text-[#1A3D37] px-5 py-2.5 rounded-xl font-medium text-sm cursor-pointer flex items-center gap-2 transition-colors duration-200 hover:bg-[#1A3D37]/[0.05]">
-                        <Download size={18} />
-                        Export List
+                    <button className="bg-white border border-[#E0E0E0] text-[#1A3D37] px-4 py-2 rounded-lg font-bold text-xs cursor-pointer flex items-center gap-2 transition-colors duration-200 hover:bg-gray-50 shadow-sm">
+                        <Download size={14} />
+                        Export
                     </button>
                 </div>
 
@@ -436,42 +436,40 @@ const DataIntegration = () => {
                     <table className="w-full border-collapse text-left">
                         <thead className="bg-[#99C7B6]">
                             <tr>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Facility Name</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">District</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Facility Type</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Last Update</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Contact Person</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Status</th>
-                                <th className="p-4 text-sm font-semibold text-[#1A3D37] border-b border-[#EEF2F0]">Action</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Facility Name</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">District</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Type</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Updated</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Status</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredData.map((facility) => (
                                 <tr key={facility.id}>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-medium">{facility.name}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.district}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.type}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.lastUpdate}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.contact}</td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
-                                        <span className={`px-3 py-1 rounded-full text-[12px] font-medium inline-block ${getStatusClass(facility.status)}`}>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-bold">{facility.name}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-medium">{facility.district}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.type}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.lastUpdate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${getStatusClass(facility.status)}`}>
                                             {facility.status}
                                         </span>
                                     </td>
-                                    <td className="p-4 text-sm text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
-                                        <div className="flex items-center gap-2">
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
+                                        <div className="flex items-center justify-center gap-1.5">
                                             <button
-                                                className="w-[70px] h-[36px] bg-[#00796B] text-white border-none rounded-lg flex items-center justify-center gap-1 text-[13px] font-medium cursor-pointer transition-opacity duration-200 hover:opacity-90"
+                                                className="w-[54px] h-[28px] bg-[#00796B] text-white border-none rounded-lg flex items-center justify-center gap-1 text-[10px] font-bold cursor-pointer transition-opacity duration-200 hover:opacity-90 shadow-sm"
                                                 onClick={() => navigate(`/facility/${facility.id}`)}
                                             >
-                                                <Eye size={16} />
-                                                <span>View</span>
+                                                <Eye size={12} />
+                                                <span>VIEW</span>
                                             </button>
-                                            <button className="w-8 h-8 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-[#E0F2F1] text-[#00796B]">
-                                                <Edit2 size={16} />
+                                            <button className="w-7 h-7 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-teal-50 text-[#00796B] shadow-sm">
+                                                <Edit2 size={12} />
                                             </button>
-                                            <button className="w-8 h-8 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-[#FFEBEE] text-[#D32F2F]">
-                                                <Trash2 size={16} />
+                                            <button className="w-7 h-7 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-red-50 text-red-600 shadow-sm">
+                                                <Trash2 size={12} />
                                             </button>
                                         </div>
                                     </td>
@@ -502,13 +500,13 @@ const DataIntegration = () => {
                 <div className="flex justify-center mb-8">
                     <div className="bg-[#79B0A3] p-0 rounded-full flex overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.1)] w-fit">
                         <button
-                            className={`px-8 py-3 rounded-full border-none cursor-pointer font-medium text-base text-white transition-all duration-300 ease-in-out whitespace-nowrap ${activeTab === 'health-facility' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
+                            className={`px-6 py-2 rounded-full border-none cursor-pointer font-bold text-xs text-white transition-all duration-300 ease-in-out whitespace-nowrap uppercase tracking-wider ${activeTab === 'health-facility' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
                             onClick={() => setActiveTab('health-facility')}
                         >
                             Health Facility List
                         </button>
                         <button
-                            className={`px-8 py-3 rounded-full border-none cursor-pointer font-medium text-base text-white transition-all duration-300 ease-in-out whitespace-nowrap ${activeTab === 'past-outbreak' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
+                            className={`px-6 py-2 rounded-full border-none cursor-pointer font-bold text-xs text-white transition-all duration-300 ease-in-out whitespace-nowrap uppercase tracking-wider ${activeTab === 'past-outbreak' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
                             onClick={() => setActiveTab('past-outbreak')}
                         >
                             Past Outbreak History
