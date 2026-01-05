@@ -15,6 +15,9 @@ The system is designed for real-world deployment in Sri Lanka, considering local
 
 The system consists of four main components that work together through a centralized backend and shared data infrastructure.
 
+<img width="1562" height="1241" alt="image" src="https://github.com/user-attachments/assets/ebc777da-9fee-4cbf-9172-4df06c5f57df" />
+
+
 
 ## Component 1: Smart Selective Mosquito Trap
 
@@ -110,6 +113,8 @@ This component strengthens coordination between hospitals, health authorities, a
 
 - Firebase
 
+- YOLOv8
+
 **Web Application**
 
 - React
@@ -119,6 +124,8 @@ This component strengthens coordination between hospitals, health authorities, a
 - JavaScript
 
 - Tailwand CSS
+
+- Leaflet.js
 
 **Data Sources**
 
