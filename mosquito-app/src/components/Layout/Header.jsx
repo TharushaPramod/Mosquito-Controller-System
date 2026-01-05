@@ -1,12 +1,29 @@
 import React from 'react';
-import { Bell, Calendar, ChevronDown, User } from 'lucide-react';
+import { Bell, Calendar, ChevronDown, User, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = ({ title }) => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        navigate('/login');
+    };
     return (
-        <header className="flex items-center justify-between px-8 py-4 bg-[#F0F7F5]">
-            {/* Left side */}
-            <div>
-                {title && <h1 className="text-xl font-bold text-gray-800">{title}</h1>}
+        <header className="flex items-center justify-between px-8 py-4 bg-[#F0F7F5] border-b border-gray-100">
+            {/* Left side - Logo & Title */}
+            <div className="flex items-center gap-8">
+                <div
+                    className="flex items-center cursor-pointer"
+                    onClick={() => window.location.href = '/'}
+                >
+                    <h1 className="text-2xl font-bold italic tracking-wider text-[#2F6A5F]">SMCS</h1>
+                </div>
+                {title && (
+                    <div className="flex items-center gap-3">
+                        <div className="h-6 w-px bg-gray-300"></div>
+                        <h1 className="text-xl font-bold text-gray-800">{title}</h1>
+                    </div>
+                )}
             </div>
 
             {/* Right side - Profile, Notifications, Date */}
@@ -36,6 +53,15 @@ const Header = ({ title }) => {
                     <Calendar size={16} className="text-[#2F6A5F]" />
                     <span>Sat, Dec 13, 2025 1.18 PM</span>
                 </div>
+
+                {/* Logout Button */}
+                <button
+                    onClick={handleLogout}
+                    className="p-2.5 text-gray-500 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors border border-gray-200 bg-white shadow-sm"
+                    title="Logout"
+                >
+                    <LogOut size={20} />
+                </button>
             </div>
         </header>
     );
