@@ -10,10 +10,14 @@ import Alerts from './pages/Alerts';
 //import Map from './pages/Map';
 import Reports from './pages/Reports';
 import MosquitoDashboard from './pages/MosquitoDashboard';
+import Sidebar from './components/Layout/Sidebar';
 
 function App() {
   return (
+   
+      
     <Router>
+      <Sidebar/>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -28,6 +32,7 @@ function App() {
         <Route path = '/mosquito-dashboard' element={<MosquitoDashboard/>} />
       </Routes>
     </Router>
+   
   );
 }
 

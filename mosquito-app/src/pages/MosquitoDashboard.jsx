@@ -3,6 +3,8 @@ import { database } from '../firebase';
 import { ref, onValue } from "firebase/database";
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
+import AllLayout from '../Components/Layout/AllLayout';
+
 const MosquitoDashboard = () => {
   const [liveData, setLiveData] = useState(null);
   const [hourlyData, setHourlyData] = useState([]);
@@ -106,6 +108,7 @@ const MosquitoDashboard = () => {
   );
 
   return (
+     <AllLayout title="">
     <div className="relative min-h-screen p-6 font-sans bg-gray-50" onClick={() => showDropdown && setShowDropdown(false)}>
       
       <header className="relative flex items-center justify-between pb-4 mb-6 border-b">
@@ -248,6 +251,7 @@ const MosquitoDashboard = () => {
       </div>
 
     </div>
+    </AllLayout>
   );
 };
 
