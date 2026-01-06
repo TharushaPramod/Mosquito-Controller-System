@@ -1,124 +1,94 @@
 import React from 'react';
-import { LayoutDashboard, Layers, AlertCircle, FileText, Map as MapIcon, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
-import clsx from 'clsx';
+import {
+    LayoutDashboard,
+    Settings,
+    TrendingUp,
+    HeartPulse,
+    LogOut,
+    Menu,
+    ChevronLeft
+} from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-
-const SidebarItem = ({ icon: Icon, label, active, onClick, isOpen }) => {
-    return (
-        <div
-            onClick={onClick}
-            className={clsx(
-                "flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors duration-200",
-                active ? "text-white border-l-4 border-white bg-white/10" : "text-gray-300 hover:bg-white/5 hover:text-white",
-                !isOpen && "justify-center px-2"
-            )}
-            title={!isOpen ? label : undefined}
-        >
-            <Icon size={20} />
-            {isOpen && <span className="font-medium whitespace-nowrap">{label}</span>}
-        </div>
-    );
-};
+import clsx from 'clsx';
+import SidebarItem from './SidebarItem';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const handleLogout = () => {
-        navigate('/login');
-    };
-
     const menuItems = [
-        { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
-        { label: 'Data Integration', icon: Layers, path: '/data-integration' },
-        { label: 'Alerts', icon: AlertCircle, path: '/alerts' },
-        { label: 'Reports', icon: FileText, path: '/reports' },
-        { label: 'Map', icon: MapIcon, path: '/map' },
+        { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: '#' },
+        { label: 'Device Control', icon: Settings, path: '#' },
+        { label: 'Density Prediction', icon: TrendingUp, path: '#' },
+        { label: 'Health Data Integration', icon: HeartPulse, path: '/' },
     ];
 
-    const getActiveItem = () => {
-        if (location.pathname === '/') return 'Dashboard';
-        if (location.pathname.startsWith('/data-integration') || location.pathname.startsWith('/facility')) return 'Data Integration';
-        if (location.pathname.startsWith('/alerts')) return 'Alerts';
-        if (location.pathname.startsWith('/reports')) return 'Reports';
-        if (location.pathname.startsWith('/map')) return 'Map';
-        return 'Dashboard';
-    };
-
-    const activeItem = getActiveItem();
+    const healthRoutes = ['/', '/data-integration', '/alerts', '/reports', '/map'];
+    const isHealthRoute = healthRoutes.some(route =>
+        location.pathname === route || location.pathname.startsWith('/facility')
+    );
 
     return (
-        <div
+        <aside
             className={clsx(
-                "h-screen bg-[#2F6A5F] flex flex-col text-white fixed left-0 top-0 transition-all duration-300 z-50",
+                "fixed left-0 top-0 h-screen bg-[#24584F] text-white flex flex-col transition-all duration-300 shadow-lg z-50",
                 isOpen ? "w-64" : "w-20"
             )}
         >
-            {/* Logo & Toggle */}
-            <div className="relative h-20 flex items-center">
-                <div
-                    className={clsx("w-full px-6 flex items-center cursor-pointer", isOpen ? "justify-between" : "justify-center")}
-                    onClick={() => navigate('/')}
-                >
-                    {isOpen ? (
-                        <h1 className="text-2xl font-bold italic tracking-wider">SMCS</h1>
-                    ) : (
-                        <h1 className="text-xl font-bold italic">SM</h1>
-                    )}
-                </div>
+            {/* Brand */}
+            <div className="flex items-center justify-between px-4 py-6">
+                {isOpen ? (
+                    <h1 className="text-lg font-semibold leading-snug">
+                        Smart Mosquito<br />Control
+                    </h1>
+                ) : (
+                    <div className="w-10 h-10 rounded-md bg-white/15 flex items-center justify-center font-bold">
+                        S
+                    </div>
+                )}
 
-                {/* Toggle Button */}
                 <button
                     onClick={toggleSidebar}
-                    className="absolute text-white hover:text-gray-200 transition-colors"
-                    style={{
-                        left: isOpen ? '83.39%' : '50%',
-                        transform: isOpen ? 'none' : 'translateX(-50%)',
-                        top: '30%', // Adjusted slightly to align with logo center vertically roughly
-                    }}
+                    className="text-white/60 hover:text-white transition"
                 >
-                    {isOpen ? (
-                        <div className="flex items-center h-6 border-l border-white/30 pl-2">
-                            <ChevronLeft size={24} />
-                        </div>
-                    ) : (
-                        <div className="mt-12"> {/* Push down below logo when collapsed */}
-                            <ChevronRight size={24} />
-                        </div>
-                    )}
+                    {isOpen ? <ChevronLeft size={20} strokeWidth={2.5} /> : <Menu size={20} strokeWidth={2.5} />}
                 </button>
             </div>
 
             {/* Navigation */}
-            <nav className="flex-1 mt-6 overflow-hidden">
-                {menuItems.map((item) => (
+            <nav className="flex-1 px-2 space-y-1">
+                {menuItems.map(item => (
                     <SidebarItem
                         key={item.label}
                         icon={item.icon}
                         label={item.label}
-                        active={activeItem === item.label}
-                        onClick={() => {
-                            navigate(item.path);
-                        }}
+                        active={
+                            (item.label === 'Health Data Integration' && isHealthRoute) ||
+                            (location.pathname === item.path && item.path !== '#')
+                        }
+                        onClick={() => item.path !== '#' && navigate(item.path)}
                         isOpen={isOpen}
                     />
                 ))}
             </nav>
 
             {/* Logout */}
-            <div className="p-6">
+            <div className="p-4">
                 <button
-                    onClick={handleLogout}
+                    onClick={() => navigate('/login')}
                     className={clsx(
-                        "flex items-center gap-2 px-4 py-2 border border-white/30 rounded-lg text-sm hover:bg-white/10 w-full justify-center transition-colors",
-                        !isOpen && "px-0 border-0"
+                        "w-full flex items-center rounded-lg transition-colors duration-200",
+                        isOpen ? "px-4 py-3 gap-3" : "p-3 justify-center",
+                        "text-white/70 hover:bg-white/10 hover:text-white"
                     )}
                 >
-                    {isOpen && <span>Logout</span>}
-                    <LogOut size={16} />
+                    <div className="w-9 h-9 flex items-center justify-center rounded-md bg-white/10">
+                        <LogOut size={18} />
+                    </div>
+                    {isOpen && <span className="text-sm font-medium">Logout</span>}
                 </button>
             </div>
-        </div>
+        </aside>
     );
 };
 
