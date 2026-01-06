@@ -9,6 +9,7 @@ import FacilityDetail from './pages/FacilityDetail';
 import Alerts from './pages/Alerts';
 import Map from './pages/Map';
 import Reports from './pages/Reports';
+import MosquitoDashboard from './pages/MosquitoDashboard';
 
 function App() {
   return (
@@ -23,6 +24,8 @@ function App() {
         <Route path="/alerts" element={<Alerts />} />
         <Route path="/map" element={<Map />} />
         <Route path="/reports" element={<Reports />} />
+
+        <Route path = '/mosquito-dashboard' element={<MosquitoDashboard/>} />
       </Routes>
     </Router>
   );
