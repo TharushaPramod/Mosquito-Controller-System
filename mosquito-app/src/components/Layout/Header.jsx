@@ -1,12 +1,15 @@
 import React from 'react';
-import { Bell, Calendar, ChevronDown, User } from 'lucide-react';
+import { Bell, Calendar, ChevronDown, User, LogOut } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Header = ({ title }) => {
     return (
-        <header className="flex items-center justify-between px-8 py-4 bg-[#F0F7F5]">
-            {/* Left side */}
-            <div>
-                {title && <h1 className="text-xl font-bold text-gray-800">{title}</h1>}
+        <header className="flex items-center justify-between px-8 py-4 bg-[#F0F7F5] border-b border-gray-100">
+            {/* Left side - Title */}
+            <div className="flex items-center gap-4">
+                {title && (
+                    <h1 className="text-xl font-bold text-gray-800">{title}</h1>
+                )}
             </div>
 
             {/* Right side - Profile, Notifications, Date */}
@@ -36,6 +39,7 @@ const Header = ({ title }) => {
                     <Calendar size={16} className="text-[#2F6A5F]" />
                     <span>Sat, Dec 13, 2025 1.18 PM</span>
                 </div>
+
             </div>
         </header>
     );

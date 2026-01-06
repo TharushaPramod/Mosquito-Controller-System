@@ -1,21 +1,29 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Sidebar from './Sidebar';
 import Header from './Header';
 import Footer from './Footer';
+import NavigationTabs from './NavigationTabs';
+import clsx from 'clsx';
 
 const DashboardLayout = ({ children, title }) => {
-    const [isSidebarOpen, setIsSidebarOpen] = React.useState(true);
-
-    const toggleSidebar = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
+    const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     return (
         <div className="flex min-h-screen bg-[#F0F7F5]">
-            <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-            <div className={`flex-1 flex flex-col transition-all duration-300 ${isSidebarOpen ? 'ml-64' : 'ml-20'}`}>
+            <Sidebar
+                isOpen={isSidebarOpen}
+                toggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)}
+            />
+
+            <div
+                className={clsx(
+                    "flex-1 flex flex-col transition-all duration-300",
+                    isSidebarOpen ? "ml-64" : "ml-20"
+                )}
+            >
                 <Header title={title} />
-                <main className="flex-1 p-8 overflow-y-auto">
+                <NavigationTabs />
+                <main className="flex-1 p-4 overflow-y-auto">
                     {children}
                 </main>
                 <Footer />

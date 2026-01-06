@@ -4,16 +4,16 @@ const ActionCard = ({ icon: Icon, image, label, color = "bg-blue-100", iconColor
     return (
         <button
             onClick={onClick}
-            className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm flex flex-col items-center justify-center gap-3 hover:shadow-md transition-all hover:bg-[#dbece9] h-full w-full"
+            className="bg-[#DDEDE7] rounded-xl px-3 py-5 shadow-sm flex flex-col items-center justify-center gap-2 hover:shadow-md transition-all hover:bg-[#dbece9] w-full"
         >
-            <div className={`w-20 h-20 rounded-lg ${color} flex items-center justify-center ${iconColor} overflow-hidden`}>
+            <div className={`w-11 h-11 rounded-lg ${color} flex items-center justify-center ${iconColor} overflow-hidden shadow-inner`}>
                 {image ? (
                     <img src={image} alt={label} className="w-full h-full object-cover" />
                 ) : (
-                    <Icon size={32} />
+                    <Icon size={18} />
                 )}
             </div>
-            <span className="text-gray-700 font-medium text-center text-sm">{label}</span>
+            <span className="text-gray-700 font-bold text-center text-[11px] tracking-tight uppercase">{label}</span>
         </button>
     );
 };
