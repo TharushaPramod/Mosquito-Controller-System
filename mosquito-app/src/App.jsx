@@ -12,6 +12,10 @@ import Reports from './pages/Reports';
 import MosquitoDashboard from './pages/MosquitoDashboard';
 
 import DeviceControll from './pages/DeviceControll';
+import { DashboardHome } from './pages/Mosquito_Density/DashboardHome';
+import { ForecastChart } from './pages/Mosquito_Density/ForecastChart';
+import { M_Reports } from './pages/Mosquito_Density/Reports';
+import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
 
 function App() {
   return (
