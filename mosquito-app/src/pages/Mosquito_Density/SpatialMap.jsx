@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import { Loader2, Filter } from 'lucide-react';
 import Navbar from '../../components/Mosquito_Density/Navbar';
+import AllLayout from '../../components/Layout/AllLayout.jsx';
 
 // Fix for default Leaflet markers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -50,17 +51,16 @@ const baseGeoJSON = {
 
 export const SpatialMap = () => {
     const [map, setMap] = useState(null);
-    const [mapData, setMapData] = useState(null); // Holds the API data
+    const [mapData, setMapData] = useState(null);
     const [loading, setLoading] = useState(true);
-    const [selectedArea, setSelectedArea] = useState('All Areas'); // Filter State
+    const [selectedArea, setSelectedArea] = useState('All Areas');
 
-    // --- FETCH DATA FROM BACKEND ---
     useEffect(() => {
         const fetchMapData = async () => {
             try {
                 const response = await fetch(`http://127.0.0.1:5001/api/map-data?t=${new Date().getTime()}`);
                 const data = await response.json();
-                setMapData(data); // Save { zones: [], hotspots: [] }
+                setMapData(data);
                 setLoading(false);
             } catch (error) {
                 console.error("Error fetching map data:", error);
@@ -71,10 +71,8 @@ export const SpatialMap = () => {
         fetchMapData();
     }, []);
 
-    // Helper: Find the API data for a specific zone name
     const getZoneData = (zoneName) => {
         if (!mapData) return {};
-        // Normalized matching
         return mapData.zones.find(z => z.name === zoneName) || {};
     };
 
@@ -99,11 +97,9 @@ export const SpatialMap = () => {
     };
 
     const onEachFeature = (feature, layer) => {
-        // Bind popup dynamically when clicked
         layer.on('click', () => {
             const props = getZoneData(feature.properties.name);
 
-            // If data is missing (loading or error), show generic message
             if (!props.risk_level) return;
 
             layer.bindPopup(`
@@ -124,115 +120,114 @@ export const SpatialMap = () => {
     };
 
     return (
-        <>
+        <AllLayout>
             <Navbar />
-            <div className="w-full min-h-screen px-4 py-8 bg-[#F0F7F5] sm:px-6 lg:px-12">
-            <div className="mb-8">
-                <h1 className="mb-2 text-4xl font-bold text-gray-900">Spatial Prediction Map</h1>
-                <p className="text-xl text-gray-600">Real-time Dengue Risk Heatmap - Gampaha District</p>
-            </div>
-
-            {/* Legend & Filter Controls */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
-                {/* Legend */}
-                <div className="flex flex-wrap gap-4 p-4 bg-white border border-gray-100 shadow-lg rounded-xl max-w-max">
-                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-red-500 rounded-full"></div><span className="text-sm font-medium">HIGH Risk</span></div>
-                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-orange-400 rounded-full"></div><span className="text-sm font-medium">MEDIUM Risk</span></div>
-                    <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-500 rounded-full"></div><span className="text-sm font-medium">LOW Risk</span></div>
+            <div className="min-h-screen p-8">
+                <div className="mb-8">
+                    <h1 className="mb-2 text-4xl font-bold text-gray-900">Spatial Prediction Map</h1>
+                    <p className="text-xl text-gray-600">Real-time Dengue Risk Heatmap - Gampaha District</p>
                 </div>
 
-                {/* Filter Dropdown */}
-                <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                        <Filter className="w-5 h-5 text-gray-400" />
+                {/* Legend & Filter Controls */}
+                <div className="flex flex-wrap items-center justify-between gap-4 mb-6">
+                    {/* Legend */}
+                    <div className="flex flex-wrap gap-4 p-4 bg-white border border-gray-100 shadow-lg rounded-xl max-w-max">
+                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-red-500 rounded-full"></div><span className="text-sm font-medium">HIGH Risk</span></div>
+                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-orange-400 rounded-full"></div><span className="text-sm font-medium">MEDIUM Risk</span></div>
+                        <div className="flex items-center gap-2"><div className="w-4 h-4 bg-green-500 rounded-full"></div><span className="text-sm font-medium">LOW Risk</span></div>
                     </div>
-                    <select
-                        value={selectedArea}
-                        onChange={(e) => setSelectedArea(e.target.value)}
-                        className="block w-full py-3 pl-10 pr-10 text-base border-gray-300 rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm shadow-lg border"
-                    >
-                        <option value="All Areas">All Areas</option>
-                        <option value="Attanagalla">Attanagalla</option>
-                        <option value="Biyagama">Biyagama</option>
-                        <option value="Divulapitiya">Divulapitiya</option>
-                        <option value="Dompe">Dompe</option>
-                        <option value="Gampaha MOH">Gampaha MOH</option>
-                        <option value="Ja-Ela">Ja-Ela</option>
-                        <option value="Katana">Katana</option>
-                        <option value="Kelaniya">Kelaniya</option>
-                        <option value="Mahara">Mahara</option>
-                        <option value="Minuwangoda">Minuwangoda</option>
-                        <option value="Mirigama">Mirigama</option>
-                        <option value="Negombo">Negombo</option>
-                        <option value="Seeduwa">Seeduwa</option>
-                        <option value="Wattala">Wattala</option>
-                    </select>
+
+                    {/* Filter Dropdown */}
+                    <div className="relative">
+                        <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                            <Filter className="w-5 h-5 text-gray-400" />
+                        </div>
+                        <select
+                            value={selectedArea}
+                            onChange={(e) => setSelectedArea(e.target.value)}
+                            className="block w-full py-3 pl-10 pr-10 text-base border border-gray-300 shadow-lg rounded-xl focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        >
+                            <option value="All Areas">All Areas</option>
+                            <option value="Attanagalla">Attanagalla</option>
+                            <option value="Biyagama">Biyagama</option>
+                            <option value="Divulapitiya">Divulapitiya</option>
+                            <option value="Dompe">Dompe</option>
+                            <option value="Gampaha MOH">Gampaha MOH</option>
+                            <option value="Ja-Ela">Ja-Ela</option>
+                            <option value="Katana">Katana</option>
+                            <option value="Kelaniya">Kelaniya</option>
+                            <option value="Mahara">Mahara</option>
+                            <option value="Minuwangoda">Minuwangoda</option>
+                            <option value="Mirigama">Mirigama</option>
+                            <option value="Negombo">Negombo</option>
+                            <option value="Seeduwa">Seeduwa</option>
+                            <option value="Wattala">Wattala</option>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            {/* MAP CONTAINER */}
-            <div className="relative overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-2xl">
+                {/* MAP CONTAINER */}
+                <div className="relative overflow-hidden bg-white border border-gray-200 shadow-2xl rounded-2xl">
 
-                {/* Loading Overlay */}
-                {loading && (
-                    <div className="absolute inset-0 z-[1000] bg-white/80 flex flex-col items-center justify-center">
-                        <Loader2 className="w-12 h-12 mb-4 text-blue-600 animate-spin" />
-                        <p className="text-lg font-semibold text-gray-700">Analyzing Spatial Data...</p>
-                    </div>
-                )}
-
-                <MapContainer
-                    center={[7.08, 79.98]}
-                    zoom={11}
-                    style={{ width: '100%', height: '70vh', minHeight: '600px' }}
-                    scrollWheelZoom={true}
-                    whenCreated={setMap}
-                >
-                    <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; OpenStreetMap contributors'
-                    />
-
-                    {/* Render Zones only if data is loaded */}
-                    {!loading && mapData && (
-                        <>
-                            <GeoJSON
-                                key={selectedArea} // Force re-render when filter changes
-                                data={selectedArea === 'All Areas'
-                                    ? baseGeoJSON
-                                    : { ...baseGeoJSON, features: baseGeoJSON.features.filter(f => f.properties.name === selectedArea) }
-                                }
-                                style={styleFeature}
-                                onEachFeature={onEachFeature}
-                            />
-
-                            <LayerGroup>
-                                {mapData.hotspots.map((hotspot, index) => (
-                                    <Circle
-                                        key={index}
-                                        center={hotspot.position}
-                                        radius={hotspot.cases * 40}
-                                        pathOptions={{
-                                            fillColor: hotspot.risk === 'HIGH' ? '#ef4444' : '#f59e0b',
-                                            fillOpacity: 0.8,
-                                            color: 'white',
-                                            weight: 2
-                                        }}
-                                    >
-                                        <Popup>
-                                            <div className="p-2 text-center">
-                                                <h4 className="font-bold text-red-600">Hotspot Detected</h4>
-                                                <p className="text-sm">Cases: {hotspot.cases}</p>
-                                            </div>
-                                        </Popup>
-                                    </Circle>
-                                ))}
-                            </LayerGroup>
-                        </>
+                    {/* Loading Overlay */}
+                    {loading && (
+                        <div className="absolute inset-0 z-[1000] bg-white/80 flex flex-col items-center justify-center">
+                            <Loader2 className="w-12 h-12 mb-4 text-blue-600 animate-spin" />
+                            <p className="text-lg font-semibold text-gray-700">Analyzing Spatial Data...</p>
+                        </div>
                     )}
-                </MapContainer>
+
+                    <MapContainer
+                        center={[7.08, 79.98]}
+                        zoom={11}
+                        style={{ width: '100%', height: '70vh', minHeight: '600px' }}
+                        scrollWheelZoom={true}
+                        whenCreated={setMap}
+                    >
+                        <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; OpenStreetMap contributors'
+                        />
+
+                        {!loading && mapData && (
+                            <>
+                                <GeoJSON
+                                    key={selectedArea}
+                                    data={selectedArea === 'All Areas'
+                                        ? baseGeoJSON
+                                        : { ...baseGeoJSON, features: baseGeoJSON.features.filter(f => f.properties.name === selectedArea) }
+                                    }
+                                    style={styleFeature}
+                                    onEachFeature={onEachFeature}
+                                />
+
+                                <LayerGroup>
+                                    {mapData.hotspots.map((hotspot, index) => (
+                                        <Circle
+                                            key={index}
+                                            center={hotspot.position}
+                                            radius={hotspot.cases * 40}
+                                            pathOptions={{
+                                                fillColor: hotspot.risk === 'HIGH' ? '#ef4444' : '#f59e0b',
+                                                fillOpacity: 0.8,
+                                                color: 'white',
+                                                weight: 2
+                                            }}
+                                        >
+                                            <Popup>
+                                                <div className="p-2 text-center">
+                                                    <h4 className="font-bold text-red-600">Hotspot Detected</h4>
+                                                    <p className="text-sm">Cases: {hotspot.cases}</p>
+                                                </div>
+                                            </Popup>
+                                        </Circle>
+                                    ))}
+                                </LayerGroup>
+                            </>
+                        )}
+                    </MapContainer>
+                </div>
             </div>
-        </div>
-    </>
+        </AllLayout>
     );
 };
