@@ -20,8 +20,8 @@ const data = [
 
 const TrendChart = () => {
     return (
-        <div className="bg-[#DDEDE7] rounded-xl p-6 shadow-sm h-full flex flex-col">
-            <h3 className="text-gray-700 font-semibold mb-4 text-center">Past 14 Days Trends</h3>
+        <div className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm h-full flex flex-col">
+            <h3 className="text-gray-500 text-[10px] uppercase tracking-widest font-bold mb-4 text-center">Past 14 Days Trends</h3>
 
             <div className="flex-1 w-full min-h-[250px]">
                 <ResponsiveContainer width="100%" height="100%">

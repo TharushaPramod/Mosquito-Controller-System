@@ -3,13 +3,13 @@ import { CloudRain, FileText, AlertTriangle } from 'lucide-react';
 
 const AlertItem = ({ icon: Icon, title, description, color, iconColor }) => {
     return (
-        <div className="flex items-start gap-4 p-4 bg-white/50 rounded-lg hover:bg-white transition-colors">
-            <div className={`p-3 rounded-full ${color} ${iconColor} flex-shrink-0`}>
-                <Icon size={20} />
+        <div className="flex items-start gap-4 p-2.5 bg-white/50 rounded-lg hover:bg-white transition-all border border-transparent hover:border-gray-100 shadow-sm hover:shadow-md group">
+            <div className={`p-2 rounded-xl ${color} ${iconColor} flex-shrink-0 transition-transform group-hover:scale-110`}>
+                <Icon size={16} />
             </div>
             <div>
-                <h4 className="font-bold text-gray-800 text-sm">{title}</h4>
-                <p className="text-xs text-gray-600 mt-1 leading-relaxed">{description}</p>
+                <h4 className="font-bold text-gray-800 text-[11px] tracking-tight">{title}</h4>
+                <p className="text-[9px] text-gray-500 mt-0.5 leading-snug">{description}</p>
             </div>
         </div>
     );
@@ -41,8 +41,8 @@ const AlertsList = () => {
     ];
 
     return (
-        <div className="bg-[#DDEDE7] rounded-xl p-6 shadow-sm h-full">
-            <h3 className="text-gray-700 font-semibold mb-4 text-center">Latest Alerts</h3>
+        <div className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm h-full flex flex-col">
+            <h3 className="text-gray-500 text-[9px] uppercase tracking-widest font-bold mb-4 text-center">Latest Alerts</h3>
 
             <div className="flex flex-col gap-3">
                 {alerts.map((alert, index) => (

@@ -15,7 +15,6 @@ import {
     FileText
 } from 'lucide-react';
 import DashboardLayout from '../components/Layout/DashboardLayout';
-import './DataIntegration.css';
 
 import {
     LineChart,
@@ -161,9 +160,9 @@ const DataIntegration = () => {
 
     const getStatusClass = (status) => {
         switch (status) {
-            case 'Active': return 'status-active';
-            case 'Not Sending Data': return 'status-not-sending';
-            case 'Delayed': return 'status-delayed';
+            case 'Active': return 'bg-[#E8F5E9] text-[#2E7D32]';
+            case 'Not Sending Data': return 'bg-[#FFFDE7] text-[#FBC02D]';
+            case 'Delayed': return 'bg-[#FFEBEE] text-[#D32F2F]';
             default: return '';
         }
     };
@@ -174,24 +173,24 @@ const DataIntegration = () => {
 
     const getSeverityClass = (severity) => {
         switch (severity) {
-            case 'High': return 'sev-high';
-            case 'Medium': return 'sev-medium';
-            case 'Low': return 'sev-low';
+            case 'High': return 'bg-[#FFEBEE] text-[#C62828]';
+            case 'Medium': return 'bg-[#FFF3E0] text-[#EF6C00]';
+            case 'Low': return 'bg-[#E8F5E9] text-[#2E7D32]';
             default: return '';
         }
     };
 
     const renderPastOutbreak = () => {
         return (
-            <div className="past-outbreak-container">
+            <div className="flex flex-col gap-6">
                 {/* Outbreak Filter Panel */}
-                <div className="outbreak-filter-panel">
-                    <div className="filter-group">
-                        <label>District</label>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 bg-white p-4 rounded-xl border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                    <div className="flex flex-col gap-2 min-w-0">
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">District</label>
                         <div className="relative">
-                            <button className="di-filter-btn" onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}>
                                 <span>{selectedDistrict}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isDistrictDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1 max-h-48 overflow-y-auto">
@@ -203,12 +202,12 @@ const DataIntegration = () => {
                         </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Disease Type</label>
+                    <div className="flex flex-col gap-2 min-w-0">
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Disease Type</label>
                         <div className="relative">
-                            <button className="di-filter-btn" onClick={() => setIsDiseaseDropdownOpen(!isDiseaseDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsDiseaseDropdownOpen(!isDiseaseDropdownOpen)}>
                                 <span>{selectedDisease}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isDiseaseDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -220,21 +219,21 @@ const DataIntegration = () => {
                         </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Date Range</label>
-                        <div className="date-range-inputs">
-                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="date-input" />
-                            <span>to</span>
-                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="date-input" />
+                    <div className="flex flex-col gap-2 min-w-0">
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Date Range</label>
+                        <div className="flex items-center gap-2 flex-nowrap">
+                            <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="flex-1 min-w-0 px-2 py-1.5 border border-[#E0E0E0] rounded-lg text-[11px] font-medium text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
+                            <span className="text-xs text-gray-400">to</span>
+                            <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="flex-1 min-w-0 px-2 py-1.5 border border-[#E0E0E0] rounded-lg text-[11px] font-medium text-[#1A3D37] outline-none transition-colors duration-200 focus:border-[#2D6A5D]" />
                         </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Severity</label>
+                    <div className="flex flex-col gap-2 min-w-0">
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Severity</label>
                         <div className="relative">
-                            <button className="di-filter-btn" onClick={() => setIsSeverityDropdownOpen(!isSeverityDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSeverityDropdownOpen(!isSeverityDropdownOpen)}>
                                 <span>{selectedSeverity}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isSeverityDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -246,12 +245,12 @@ const DataIntegration = () => {
                         </div>
                     </div>
 
-                    <div className="filter-group">
-                        <label>Source</label>
+                    <div className="flex flex-col gap-2 min-w-0">
+                        <label className="text-[11px] font-bold text-[#4A635F] uppercase tracking-wider">Source</label>
                         <div className="relative">
-                            <button className="di-filter-btn" onClick={() => setIsSourceDropdownOpen(!isSourceDropdownOpen)}>
+                            <button className="flex items-center justify-between w-full px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]" onClick={() => setIsSourceDropdownOpen(!isSourceDropdownOpen)}>
                                 <span>{selectedSource}</span>
-                                <ChevronDown size={14} />
+                                <ChevronDown size={12} />
                             </button>
                             {isSourceDropdownOpen && (
                                 <div className="absolute top-full left-0 mt-1 w-48 bg-white border border-gray-200 rounded-lg shadow-xl z-30 py-1">
@@ -265,36 +264,36 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Outbreak History Table */}
-                <div className="di-table-container outbreak-table">
-                    <table className="di-table">
-                        <thead>
+                <div className="bg-[#DDEDE7] rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] mb-6">
+                    <table className="w-full border-collapse text-left">
+                        <thead className="bg-[#99C7B6]">
                             <tr>
-                                <th>Outbreak ID</th>
-                                <th>District</th>
-                                <th>Start Date</th>
-                                <th>End Date</th>
-                                <th>Total Reported Cases</th>
-                                <th>Severity Rating</th>
-                                <th>Download Report</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Outbreak ID</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">District</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Start Date</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">End Date</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Reported Cases</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Severity</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredOutbreaks.map((ob) => (
                                 <tr key={ob.id}>
-                                    <td className="font-mono">{ob.id}</td>
-                                    <td>{ob.district}</td>
-                                    <td>{ob.startDate}</td>
-                                    <td>{ob.endDate}</td>
-                                    <td className="font-bold">{ob.cases}</td>
-                                    <td>
-                                        <span className={`severity-tag ${getSeverityClass(ob.severity)}`}>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-mono">{ob.id}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-medium">{ob.district}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.startDate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{ob.endDate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-bold">{ob.cases}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${getSeverityClass(ob.severity)}`}>
                                             {ob.severity}
                                         </span>
                                     </td>
-                                    <td>
-                                        <button className="download-report-btn">
-                                            <Download size={16} />
-                                            <span>PDF</span>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white text-[#1A3D37] border border-[#E0E0E0] rounded-lg text-[10px] font-bold cursor-pointer transition-all duration-200 hover:bg-[#2D6A5D] hover:text-white hover:border-[#2D6A5D] shadow-sm">
+                                            <Download size={12} />
+                                            <span>EXCEL</span>
                                         </button>
                                     </td>
                                 </tr>
@@ -304,13 +303,13 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Visual Analysis Section */}
-                <div className="outbreak-analytics-grid">
-                    <div className="analytics-card">
-                        <div className="card-header">
-                            <FileText size={18} className="text-teal-600" />
-                            <h4>Outbreak Timeline Graph</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                        <div className="flex items-center gap-2 mb-4">
+                            <FileText size={16} className="text-teal-600" />
+                            <h4 className="m-0 text-xs font-bold text-[#1A3D37] uppercase tracking-wider">Outbreak Timeline Graph</h4>
                         </div>
-                        <div className="chart-container">
+                        <div className="w-full">
                             <ResponsiveContainer width="100%" height={250}>
                                 <LineChart data={timelineData}>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
@@ -323,12 +322,12 @@ const DataIntegration = () => {
                         </div>
                     </div>
 
-                    <div className="analytics-card">
-                        <div className="card-header">
-                            <Calendar size={18} className="text-teal-600" />
-                            <h4>Seasonal Trend Line (Yearly)</h4>
+                    <div className="bg-white rounded-xl p-4 border border-[#E0E0E0] shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
+                        <div className="flex items-center gap-2 mb-4">
+                            <Calendar size={16} className="text-teal-600" />
+                            <h4 className="m-0 text-xs font-bold text-[#1A3D37] uppercase tracking-wider">Seasonal Trend Line (Yearly)</h4>
                         </div>
-                        <div className="chart-container">
+                        <div className="w-full">
                             <ResponsiveContainer width="100%" height={250}>
                                 <AreaChart data={seasonalData}>
                                     <defs>
@@ -355,14 +354,14 @@ const DataIntegration = () => {
         return (
             <>
                 {/* Filters and Search */}
-                <div className="di-filters-section">
+                <div className="flex items-center gap-3 mb-5 w-full">
                     <div className="relative">
                         <button
-                            className="di-filter-btn"
+                            className="flex items-center gap-2 px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
                             onClick={() => setIsDistrictDropdownOpen(!isDistrictDropdownOpen)}
                         >
-                            <span>{selectedDistrict === 'All' ? 'Filter By District' : selectedDistrict}</span>
-                            <ChevronDown size={16} />
+                            <span>{selectedDistrict === 'All' ? 'Filter District' : selectedDistrict}</span>
+                            <ChevronDown size={12} />
                         </button>
                         {isDistrictDropdownOpen && (
                             <div className="absolute top-full left-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-2 max-h-60 overflow-y-auto">
@@ -382,12 +381,12 @@ const DataIntegration = () => {
                         )}
                     </div>
 
-                    <div className="di-search-container">
-                        <Search className="di-search-icon" size={18} />
+                    <div className="relative flex-1">
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-[#666]" size={14} />
                         <input
                             type="text"
-                            className="di-search-input"
-                            placeholder="Search Here"
+                            className="w-full pl-9 pr-4 py-2 bg-white border border-[#E0E0E0] rounded-lg text-xs outline-none transition-colors duration-200 focus:border-[#1A3D37]"
+                            placeholder="Search facility..."
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                         />
@@ -395,11 +394,11 @@ const DataIntegration = () => {
 
                     <div className="relative">
                         <button
-                            className="di-filter-btn"
+                            className="flex items-center gap-2 px-3 py-2 bg-white border border-[#E0E0E0] rounded-lg text-[#1A3D37] text-xs font-semibold cursor-pointer whitespace-nowrap transition-colors duration-200 hover:border-[#1A3D37]"
                             onClick={() => setIsStatusDropdownOpen(!isStatusDropdownOpen)}
                         >
-                            <span>{selectedStatus === 'All' ? 'Filter By Status' : selectedStatus}</span>
-                            <ChevronDown size={16} />
+                            <span>{selectedStatus === 'All' ? 'Filter Status' : selectedStatus}</span>
+                            <ChevronDown size={12} />
                         </button>
                         {isStatusDropdownOpen && (
                             <div className="absolute top-full right-0 mt-2 w-48 bg-white border border-gray-200 rounded-xl shadow-lg z-20 py-2">
@@ -421,58 +420,56 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="di-actions">
-                    <button className="di-btn-primary">
-                        <Plus size={18} style={{ marginRight: '8px', verticalAlign: 'middle' }} />
-                        Add New Facility
+                <div className="flex justify-end gap-2 mb-4">
+                    <button className="bg-[#00796B] text-white border-none px-4 py-2 rounded-lg font-bold text-xs cursor-pointer transition-opacity duration-200 hover:opacity-90 shadow-sm">
+                        <Plus size={14} className="inline-block mr-1.5 align-middle" />
+                        Add Facility
                     </button>
-                    <button className="di-btn-outline">
-                        <Download size={18} />
-                        Export List
+                    <button className="bg-white border border-[#E0E0E0] text-[#1A3D37] px-4 py-2 rounded-lg font-bold text-xs cursor-pointer flex items-center gap-2 transition-colors duration-200 hover:bg-gray-50 shadow-sm">
+                        <Download size={14} />
+                        Export
                     </button>
                 </div>
 
                 {/* Data Table */}
-                <div className="di-table-container">
-                    <table className="di-table">
-                        <thead>
+                <div className="bg-[#DDEDE7] rounded-2xl overflow-hidden shadow-[0_4px_12px_rgba(0,0,0,0.03)] mb-6">
+                    <table className="w-full border-collapse text-left">
+                        <thead className="bg-[#99C7B6]">
                             <tr>
-                                <th>Facility Name</th>
-                                <th>District</th>
-                                <th>Facility Type</th>
-                                <th>Last Update</th>
-                                <th>Contact Person</th>
-                                <th>Status</th>
-                                <th>Action</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Facility Name</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">District</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Type</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider">Updated</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Status</th>
+                                <th className="p-3 text-xs font-bold text-[#1A3D37] border-b border-[#EEF2F0] uppercase tracking-wider text-center">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
                             {filteredData.map((facility) => (
                                 <tr key={facility.id}>
-                                    <td style={{ fontWeight: '500' }}>{facility.name}</td>
-                                    <td>{facility.district}</td>
-                                    <td>{facility.type}</td>
-                                    <td>{facility.lastUpdate}</td>
-                                    <td>{facility.contact}</td>
-                                    <td>
-                                        <span className={`status-pill ${getStatusClass(facility.status)}`}>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-bold">{facility.name}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 font-medium">{facility.district}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.type}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">{facility.lastUpdate}</td>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30 text-center">
+                                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold uppercase ${getStatusClass(facility.status)}`}>
                                             {facility.status}
                                         </span>
                                     </td>
-                                    <td>
-                                        <div className="di-action-icons" style={{ alignItems: 'center' }}>
+                                    <td className="p-3 text-[11px] text-[#1A3D37] border-b border-[#EEF2F0] bg-[#F1F8F5]/30">
+                                        <div className="flex items-center justify-center gap-1.5">
                                             <button
-                                                className="di-view-btn"
+                                                className="w-[54px] h-[28px] bg-[#00796B] text-white border-none rounded-lg flex items-center justify-center gap-1 text-[10px] font-bold cursor-pointer transition-opacity duration-200 hover:opacity-90 shadow-sm"
                                                 onClick={() => navigate(`/facility/${facility.id}`)}
                                             >
-                                                <Eye size={16} />
-                                                <span>View</span>
+                                                <Eye size={12} />
+                                                <span>VIEW</span>
                                             </button>
-                                            <button className="di-icon-btn edit">
-                                                <Edit2 size={16} />
+                                            <button className="w-7 h-7 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-teal-50 text-[#00796B] shadow-sm">
+                                                <Edit2 size={12} />
                                             </button>
-                                            <button className="di-icon-btn delete">
-                                                <Trash2 size={16} />
+                                            <button className="w-7 h-7 rounded-lg border-none flex items-center justify-center cursor-pointer transition-opacity duration-200 hover:opacity-80 bg-red-50 text-red-600 shadow-sm">
+                                                <Trash2 size={12} />
                                             </button>
                                         </div>
                                     </td>
@@ -483,12 +480,12 @@ const DataIntegration = () => {
                 </div>
 
                 {/* Footer Pagination */}
-                <footer className="di-footer">
-                    <button className="di-pagination-btn">
+                <footer className="flex justify-center items-center gap-4 mt-6">
+                    <button className="bg-transparent border border-[#E0E0E0] rounded-lg p-2 cursor-pointer flex items-center justify-center text-[#1A3D37] transition-colors duration-200 hover:bg-[#F5F5F5]">
                         <ChevronLeft size={20} />
                     </button>
-                    <span className="di-page-info">Page 1 of 10</span>
-                    <button className="di-pagination-btn">
+                    <span className="text-sm font-medium">Page 1 of 10</span>
+                    <button className="bg-transparent border border-[#E0E0E0] rounded-lg p-2 cursor-pointer flex items-center justify-center text-[#1A3D37] transition-colors duration-200 hover:bg-[#F5F5F5]">
                         <ChevronRight size={20} />
                     </button>
                 </footer>
@@ -498,18 +495,18 @@ const DataIntegration = () => {
 
     return (
         <DashboardLayout title="Data Integration">
-            <div className="data-integration-content">
+            <div className="text-[#1A3D37] font-sans">
                 {/* Tab Switcher */}
-                <div className="di-tab-switcher">
-                    <div className="di-tabs">
+                <div className="flex justify-center mb-8">
+                    <div className="bg-[#79B0A3] p-0 rounded-full flex overflow-hidden shadow-[0_4px_10px_rgba(0,0,0,0.1)] w-fit">
                         <button
-                            className={`di-tab ${activeTab === 'health-facility' ? 'active' : 'inactive'}`}
+                            className={`px-6 py-2 rounded-full border-none cursor-pointer font-bold text-xs text-white transition-all duration-300 ease-in-out whitespace-nowrap uppercase tracking-wider ${activeTab === 'health-facility' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
                             onClick={() => setActiveTab('health-facility')}
                         >
                             Health Facility List
                         </button>
                         <button
-                            className={`di-tab ${activeTab === 'past-outbreak' ? 'active' : 'inactive'}`}
+                            className={`px-6 py-2 rounded-full border-none cursor-pointer font-bold text-xs text-white transition-all duration-300 ease-in-out whitespace-nowrap uppercase tracking-wider ${activeTab === 'past-outbreak' ? 'bg-[#2D6A5D] shadow-[inset_0_2px_4px_rgba(0,0,0,0.1),4px_0_15px_rgba(0,0,0,0.15)] z-[1]' : 'bg-transparent hover:bg-white/10'}`}
                             onClick={() => setActiveTab('past-outbreak')}
                         >
                             Past Outbreak History
