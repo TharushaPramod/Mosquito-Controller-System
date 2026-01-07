@@ -17,8 +17,8 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const location = useLocation();
 
     const menuItems = [
-        { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: 'mosquito-dashboard' },
-        { label: 'Device Control', icon: Settings, path: '#' },
+        { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: '/mosquito-dashboard' },
+        { label: 'Device Control', icon: Settings, path: '/deviceControll-dashboard' },
         { label: 'Density Prediction', icon: TrendingUp, path: '#' },
         { label: 'Health Data Integration', icon: HeartPulse, path: '/' },
     ];
