@@ -15,8 +15,7 @@ The system is designed for real-world deployment in Sri Lanka, considering local
 
 The system consists of four main components that work together through a centralized backend and shared data infrastructure.
 
-<img width="1562" height="1241" alt="image" src="https://github.com/user-attachments/assets/ebc777da-9fee-4cbf-9172-4df06c5f57df" />
-
+<img width="936" height="791" alt="Green and Yellow Modern Construction Pitch Deck Presentation" src="https://github.com/user-attachments/assets/2b0fbbaa-c04e-45e1-a31b-c7b29cd7c440" />
 
 
 ## Component 1: Smart Selective Mosquito Trap
