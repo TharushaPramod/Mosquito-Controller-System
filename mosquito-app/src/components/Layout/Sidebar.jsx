@@ -6,12 +6,12 @@ import {
     HeartPulse,
     LogOut,
     Menu,
-    ChevronLeft
+    ChevronLeft,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import SidebarItem from './SidebarItem';
-
+    
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
@@ -19,7 +19,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
     const menuItems = [
         { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: 'mosquito-dashboard' },
         { label: 'Device Control', icon: Settings, path: '#' },
-        { label: 'Density Prediction', icon: TrendingUp, path: '#' },
+        { label: 'Density Prediction', icon: TrendingUp, path: 'dashboardHome' },
         { label: 'Health Data Integration', icon: HeartPulse, path: '/' },
     ];
 

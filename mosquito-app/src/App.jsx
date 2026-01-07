@@ -14,6 +14,7 @@ import Sidebar from './components/Layout/Sidebar';
 import { DashboardHome } from './pages/Mosquito_Density/DashboardHome';
 import { ForecastChart } from './pages/Mosquito_Density/ForecastChart';
 import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
+import { M_Reports } from './pages/Mosquito_Density/Reports';
 
 function App() {
   return (
@@ -36,8 +37,8 @@ function App() {
 
         <Route path="/dashboardHome" element={<DashboardHome />} />
         <Route path="/forecast" element={<ForecastChart />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/map" element={<SpatialMap />} />
+        <Route path="/m_reports" element={<M_Reports />} />
+        <Route path="/spatialmap" element={<SpatialMap />} />
       </Routes>
     </Router>
 
