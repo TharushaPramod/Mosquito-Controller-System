@@ -1,22 +1,19 @@
-// src/firebase.js
-
 import { initializeApp } from "firebase/app";
-import { getDatabase } from "firebase/database";
+import { getDatabase } from "firebase/database"; // Database eka ona nisa meka add karanna
 
-// --- මෙතනට ඔයාගේ Firebase Config ටික දාන්න ---
 const firebaseConfig = {
-  apiKey: "AIzaSyDhlkpjU4WHY3T9n9DqstDqhdaLf8JOlK4",
-  authDomain: "mosquito-trap-01.firebaseapp.com",
-  databaseURL: "https://mosquito-trap-01-default-rtdb.firebaseio.com",
-  projectId: "mosquito-trap-01",
-  storageBucket: "mosquito-trap-01.firebasestorage.app",
-  messagingSenderId: "929830720122",
-  appId: "1:929830720122:web:9b81e025baf1f1a2fd21c3",
-  measurementId: "G-0W40XMKMRS"
+  apiKey: "AIzaSyBCfOPxDBUpVkP52jB0ti1Qpp-mKVcMaOg",
+  authDomain: "mosquito-dashboard-381a3.firebaseapp.com",
+  databaseURL: "https://mosquito-dashboard-381a3-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "mosquito-dashboard-381a3",
+  storageBucket: "mosquito-dashboard-381a3.firebasestorage.app",
+  messagingSenderId: "81707227953",
+  appId: "1:81707227953:web:41d30b336e72e0b440ee10",
+  measurementId: "G-HQFV0EFWB1"
 };
 
-// Firebase පණ ගන්වනවා
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Database එක Export කරනවා (අනිත් ෆයිල් වලට පාවිච්චි කරන්න)
-export const database = getDatabase(app);
+// Database eka export karanna Dashboard ekedi use karanna
+export const db = getDatabase(app);
