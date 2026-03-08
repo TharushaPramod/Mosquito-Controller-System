@@ -9,9 +9,9 @@ const HeatmapSection = () => {
     const districts = ['All', ...districtData.features.map(feature => feature.properties.shapeName).sort()];
 
     return (
-        <div className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm h-full flex flex-col">
+        <div className="h-full flex flex-col">
             <div className="flex justify-between items-center mb-4">
-                <h3 className="text-gray-500 text-[10px] uppercase tracking-widest font-bold">Regional Heatmap</h3>
+                <h3 className="text-gray-400 text-[10px] uppercase tracking-widest font-bold">Regional Map</h3>
                 <select
                     value={selectedDistrict}
                     onChange={(e) => setSelectedDistrict(e.target.value)}
