@@ -1,61 +1,60 @@
-import React from 'react';
-import { CloudRain, FileText, AlertTriangle } from 'lucide-react';
+// components/Dashboard/AlertsList.jsx
+import React, { useEffect, useState } from "react";
+import { CloudRain, FileText, AlertTriangle, Bell } from "lucide-react";
 
-const AlertItem = ({ icon: Icon, title, description, color, iconColor }) => {
-    return (
-        <div className="flex items-start gap-4 p-2.5 bg-white/50 rounded-lg hover:bg-white transition-all border border-transparent hover:border-gray-100 shadow-sm hover:shadow-md group">
-            <div className={`p-2 rounded-xl ${color} ${iconColor} flex-shrink-0 transition-transform group-hover:scale-110`}>
-                <Icon size={16} />
-            </div>
-            <div>
-                <h4 className="font-bold text-gray-800 text-[11px] tracking-tight">{title}</h4>
-                <p className="text-[9px] text-gray-500 mt-0.5 leading-snug">{description}</p>
-            </div>
-        </div>
-    );
+const ICONS = { weather: CloudRain, lab: FileText, outbreak: AlertTriangle, general: Bell };
+const COLORS = {
+    high: { bg: "bg-red-100", icon: "text-red-500" },
+    medium: { bg: "bg-orange-100", icon: "text-orange-500" },
+    low: { bg: "bg-green-100", icon: "text-green-600" },
 };
 
+const BASE = import.meta.env.VITE_API_URL;
+
 const AlertsList = () => {
-    const alerts = [
-        {
-            icon: CloudRain,
-            title: "High Risk Weather Conditions",
-            description: "Heavy rainfall & humidity recorded in the Western Province.",
-            color: "bg-red-100",
-            iconColor: "text-red-500"
-        },
-        {
-            icon: FileText,
-            title: "Dengue positive lab results",
-            description: "15 labs confirm a positive cases around Gampaha District.",
-            color: "bg-orange-100",
-            iconColor: "text-orange-500"
-        },
-        {
-            icon: AlertTriangle, // Using AlertTriangle as a substitute for the clipboard icon in the image
-            title: "School Or Public Place Outbreak Risk",
-            description: "Five students in Colombo school tested positive.",
-            color: "bg-green-100",
-            iconColor: "text-green-600" // The image has a green icon for the last one
-        }
+    const [alerts, setAlerts] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetch(BASE + "/notifications/alerts?limit=3")
+            .then(r => r.json())
+            .then(res => { setAlerts(res.data || []); setLoading(false); })
+            .catch(() => { setLoading(false); });
+    }, []);
+
+    // Fallback static alerts when no backend data yet
+    const displayAlerts = alerts.length > 0 ? alerts : [
+        { _id: 1, title: "High Risk Weather Conditions", message: "Heavy rainfall & humidity in Western Province.", severity: "high", type: "weather" },
+        { _id: 2, title: "Dengue Positive Lab Results", message: "15 labs confirm positive cases in Gampaha.", severity: "medium", type: "lab" },
+        { _id: 3, title: "School Outbreak Risk", message: "Five students in Colombo school tested positive.", severity: "low", type: "outbreak" },
     ];
 
     return (
-        <div className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm h-full flex flex-col">
-            <h3 className="text-gray-500 text-[9px] uppercase tracking-widest font-bold mb-4 text-center">Latest Alerts</h3>
-
-            <div className="flex flex-col gap-3">
-                {alerts.map((alert, index) => (
-                    <AlertItem
-                        key={index}
-                        icon={alert.icon}
-                        title={alert.title}
-                        description={alert.description}
-                        color={alert.color}
-                        iconColor={alert.iconColor}
-                    />
-                ))}
-            </div>
+        <div className="h-full flex flex-col p-5">
+            <h3 className="text-gray-400 text-[10px] uppercase tracking-widest font-bold mb-6 text-center tracking-[0.2em]">Latest Alerts</h3>
+            {loading ? (
+                <div className="flex flex-col gap-3">
+                    {[1, 2, 3].map(i => <div key={i} className="h-16 bg-white/50 rounded-lg animate-pulse" />)}
+                </div>
+            ) : (
+                <div className="flex flex-col gap-3">
+                    {displayAlerts.map((alert) => {
+                        const Icon = ICONS[alert.type] || Bell;
+                        const colors = COLORS[alert.severity] || COLORS.low;
+                        return (
+                            <div key={alert._id} className="flex items-start gap-4 p-2.5 bg-white/50 rounded-lg hover:bg-white transition-all border border-transparent hover:border-gray-100 shadow-sm hover:shadow-md group">
+                                <div className={`p-2 rounded-xl ${colors.bg} ${colors.icon} flex-shrink-0 transition-transform group-hover:scale-110`}>
+                                    <Icon size={16} />
+                                </div>
+                                <div>
+                                    <h4 className="font-bold text-gray-800 text-[11px] tracking-tight">{alert.title}</h4>
+                                    <p className="text-[9px] text-gray-500 mt-0.5 leading-snug">{alert.message || alert.description}</p>
+                                </div>
+                            </div>
+                        );
+                    })}
+                </div>
+            )}
         </div>
     );
 };

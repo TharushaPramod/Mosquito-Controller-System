@@ -1,10 +1,26 @@
-import React from 'react';
-import { Bell, Calendar, ChevronDown, User, LogOut } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Bell, Calendar, ChevronDown, User } from 'lucide-react';
 
 const Header = ({ title }) => {
+    const [now, setNow] = useState(new Date());
+
+    useEffect(() => {
+        const interval = setInterval(() => setNow(new Date()), 1000);
+        return () => clearInterval(interval);
+    }, []);
+
+    const formatted = now.toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        hour12: true,
+    });
+
     return (
-        <header className="flex items-center justify-between px-8 py-4 bg-[#F0F7F5] border-b border-gray-100">
+        <header className="flex items-center justify-between px-8 py-3 bg-[#F0F7F5] border-b border-gray-100">
             {/* Left side - Title */}
             <div className="flex items-center gap-4">
                 {title && (
@@ -21,7 +37,7 @@ const Header = ({ title }) => {
                     </div>
                     <div className="flex flex-col">
                         <span className="text-sm font-semibold text-gray-800 leading-tight">Dr. Silva</span>
-                        <span className="text-xs text-gray-500 leading-tight">Cheif Medical Officer</span>
+                        <span className="text-xs text-gray-500 leading-tight">Chief Medical Officer</span>
                     </div>
                     <ChevronDown size={16} className="text-gray-400 ml-1" />
                 </div>
@@ -34,12 +50,11 @@ const Header = ({ title }) => {
                     <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-[#F0F7F5]"></span>
                 </div>
 
-                {/* Date */}
+                {/* Live Date & Time */}
                 <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 text-sm font-medium shadow-sm">
                     <Calendar size={16} className="text-[#2F6A5F]" />
-                    <span>Sat, Dec 13, 2025 1.18 PM</span>
+                    <span>{formatted}</span>
                 </div>
-
             </div>
         </header>
     );

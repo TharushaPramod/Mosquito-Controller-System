@@ -6,8 +6,9 @@ import Login from './pages/Login';
 import DataIntegration from './pages/DataIntegration';
 import FacilityDetail from './pages/FacilityDetail';
 import Alerts from './pages/Alerts';
-//import Map from './pages/Map';
+import Map from './pages/Map';
 import Reports from './pages/Reports';
+import Verification from './pages/Verification';
 
 function App() {
   return (
@@ -20,8 +21,9 @@ function App() {
         <Route path="/data-integration" element={<DataIntegration />} />
         <Route path="/facility/:id" element={<FacilityDetail />} />
         <Route path="/alerts" element={<Alerts />} />
-        //<Route path="/map" element={<Map />} />
+        <Route path="/map" element={<Map />} />
         <Route path="/reports" element={<Reports />} />
+        <Route path="/verification" element={<Verification />} />
       </Routes>
     </Router>
   );
