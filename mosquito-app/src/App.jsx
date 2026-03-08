@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
@@ -9,10 +10,23 @@ import Alerts from './pages/Alerts';
 import Map from './pages/Map';
 import Reports from './pages/Reports';
 import Verification from './pages/Verification';
+import MosquitoDashboard from './pages/MosquitoDashboard';
+
+import DeviceControll from './pages/DeviceControll';
+import MosquitoDensityDashboard from './pages/Mosquito_Density/MosquitoDensityDashboard';
+import MosquitoInstructions from './pages/Mosquito_Density/MosquitoInstructions';
+import { Table } from './pages/Mosquito_Density/Table';
+import { M_Reports } from './pages/Mosquito_Density/Reports';
+import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
+import { Analysis } from './pages/Mosquito_Density/Analysis';
+
 
 function App() {
   return (
+
+
     <Router>
+      
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -24,9 +38,23 @@ function App() {
         <Route path="/map" element={<Map />} />
         <Route path="/reports" element={<Reports />} />
         <Route path="/verification" element={<Verification />} />
+
+        <Route path='/mosquito-dashboard' element={<MosquitoDashboard />} />
+
+        <Route path="/analysis" element={<Analysis />} />
+        <Route path="/table" element={<Table />} />
+        <Route path="/m_reports" element={<M_Reports />} />
+        <Route path="/spatialmap" element={<SpatialMap />} />
+        <Route path="/mosquito-density-dashboard" element={<MosquitoDensityDashboard />} />
+        <Route path="/mosquito-instructions" element={<MosquitoInstructions />} />
+        <Route path = '/mosquito-dashboard' element={<MosquitoDashboard/>} />
+        <Route path = '/deviceControll-dashboard' element={<DeviceControll/>} />
+
       </Routes>
     </Router>
+
   );
 }
 
 export default App;
+

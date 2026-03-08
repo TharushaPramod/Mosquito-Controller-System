@@ -48,3 +48,15 @@ desktop.ini
 *.local
 .cache/
 .temp/
+# Python
+ml/.venv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Env files
+.env

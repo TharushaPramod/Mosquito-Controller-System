@@ -6,20 +6,20 @@ import {
     HeartPulse,
     LogOut,
     Menu,
-    ChevronLeft
+    ChevronLeft,
 } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 import SidebarItem from './SidebarItem';
-
+    
 const Sidebar = ({ isOpen, toggleSidebar }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
     const menuItems = [
-        { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: '#' },
-        { label: 'Device Control', icon: Settings, path: '#' },
-        { label: 'Density Prediction', icon: TrendingUp, path: '#' },
+        { label: 'Mosquito Dashboard', icon: LayoutDashboard, path: '/mosquito-dashboard' },
+        { label: 'Device Control', icon: Settings, path: '/deviceControll-dashboard' },
+        { label: 'Density Prediction', icon: TrendingUp, path: '/mosquito-density-dashboard' },
         { label: 'Health Data Integration', icon: HeartPulse, path: '/' },
     ];
 
@@ -42,14 +42,14 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         Smart Mosquito<br />Control
                     </h1>
                 ) : (
-                    <div className="w-10 h-10 rounded-md bg-white/15 flex items-center justify-center font-bold">
+                    <div className="flex items-center justify-center w-10 h-10 font-bold rounded-md bg-white/15">
                         S
                     </div>
                 )}
 
                 <button
                     onClick={toggleSidebar}
-                    className="text-white/60 hover:text-white transition"
+                    className="transition text-white/60 hover:text-white"
                 >
                     {isOpen ? <ChevronLeft size={20} strokeWidth={2.5} /> : <Menu size={20} strokeWidth={2.5} />}
                 </button>
@@ -82,7 +82,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
                         "text-white/70 hover:bg-white/10 hover:text-white"
                     )}
                 >
-                    <div className="w-9 h-9 flex items-center justify-center rounded-md bg-white/10">
+                    <div className="flex items-center justify-center rounded-md w-9 h-9 bg-white/10">
                         <LogOut size={18} />
                     </div>
                     {isOpen && <span className="text-sm font-medium">Logout</span>}
