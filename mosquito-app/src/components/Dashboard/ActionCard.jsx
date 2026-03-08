@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ActionCard = ({ icon: Icon, image, label, color = "bg-blue-100", iconColor = "text-blue-500", onClick }) => {
+const ActionCard = ({ icon: Icon, image, label, color, iconColor, onClick }) => {
     return (
         <button
             onClick={onClick}
@@ -10,7 +10,7 @@ const ActionCard = ({ icon: Icon, image, label, color = "bg-blue-100", iconColor
                 {image ? (
                     <img src={image} alt={label} className="w-full h-full object-cover" />
                 ) : (
-                    <Icon size={18} />
+                    Icon ? <Icon size={18} /> : null
                 )}
             </div>
             <span className="text-gray-700 font-bold text-center text-[11px] tracking-tight uppercase">{label}</span>

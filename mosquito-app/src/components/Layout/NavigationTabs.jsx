@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutDashboard, Layers, AlertCircle, FileText, Map as MapIcon } from 'lucide-react';
+import { LayoutDashboard, Layers, AlertCircle, FileText, Map as MapIcon, CheckCircle } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import clsx from 'clsx';
 
@@ -12,6 +12,7 @@ const NavigationTabs = () => {
         { label: 'Data Integration', icon: Layers, path: '/data-integration' },
         { label: 'Alerts', icon: AlertCircle, path: '/alerts' },
         { label: 'Reports', icon: FileText, path: '/reports' },
+        { label: 'Verification', icon: CheckCircle, path: '/verification' },
         { label: 'Map', icon: MapIcon, path: '/map' },
     ];
 
@@ -20,6 +21,7 @@ const NavigationTabs = () => {
         if (location.pathname.startsWith('/data-integration') || location.pathname.startsWith('/facility')) return 'Data Integration';
         if (location.pathname.startsWith('/alerts')) return 'Alerts';
         if (location.pathname.startsWith('/reports')) return 'Reports';
+        if (location.pathname.startsWith('/verification')) return 'Verification';
         if (location.pathname.startsWith('/map')) return 'Map';
         return 'Dashboard';
     };
@@ -36,7 +38,7 @@ const NavigationTabs = () => {
                             key={item.label}
                             onClick={() => navigate(item.path)}
                             className={clsx(
-                                "flex items-center gap-2.5 px-1 py-4 border-b-2 transition-all duration-300 relative group",
+                                "flex items-center gap-2.5 px-1 py-2 border-b-2 transition-all duration-300 relative group",
                                 isActive
                                     ? "border-[#2F6A5F] text-[#2F6A5F]"
                                     : "border-transparent text-gray-400 hover:text-[#2F6A5F]"
