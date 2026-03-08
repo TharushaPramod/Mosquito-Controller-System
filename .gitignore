@@ -1,3 +1,15 @@
 mosquito-app/node_modules
 mosquito-backend/node_modules
 .env
+# Python
+ml/.venv/
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Node
+node_modules/
+
+# Env files
+.env

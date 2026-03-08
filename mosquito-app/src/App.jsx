@@ -12,10 +12,13 @@ import Reports from './pages/Reports';
 import MosquitoDashboard from './pages/MosquitoDashboard';
 
 import DeviceControll from './pages/DeviceControll';
-import { DashboardHome } from './pages/Mosquito_Density/DashboardHome';
-import { ForecastChart } from './pages/Mosquito_Density/ForecastChart';
+import MosquitoDensityDashboard from './pages/Mosquito_Density/MosquitoDensityDashboard';
+import MosquitoInstructions from './pages/Mosquito_Density/MosquitoInstructions';
+import { Table } from './pages/Mosquito_Density/Table';
 import { M_Reports } from './pages/Mosquito_Density/Reports';
 import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
+import { Analysis } from './pages/Mosquito_Density/Analysis';
+
 
 function App() {
   return (
@@ -36,10 +39,12 @@ function App() {
 
         <Route path='/mosquito-dashboard' element={<MosquitoDashboard />} />
 
-        <Route path="/dashboardHome" element={<DashboardHome />} />
-        <Route path="/forecast" element={<ForecastChart />} />
+        <Route path="/analysis" element={<Analysis />} />
+        <Route path="/table" element={<Table />} />
         <Route path="/m_reports" element={<M_Reports />} />
         <Route path="/spatialmap" element={<SpatialMap />} />
+        <Route path="/mosquito-density-dashboard" element={<MosquitoDensityDashboard />} />
+        <Route path="/mosquito-instructions" element={<MosquitoInstructions />} />
         <Route path = '/mosquito-dashboard' element={<MosquitoDashboard/>} />
         <Route path = '/deviceControll-dashboard' element={<DeviceControll/>} />
 

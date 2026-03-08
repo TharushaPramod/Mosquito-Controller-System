@@ -1,157 +1,163 @@
 import React, { useState } from 'react';
-import { FileText, Settings, Trash2, Download, Loader2 } from 'lucide-react';
-import jsPDF from 'jspdf';
+
 import Navbar from '../../components/Mosquito_Density/Navbar';
-import AllLayout from '../../components/Layout/AllLayout.jsx';
-import 'jspdf-autotable';
+import AllLayout from '../../Components/Layout/AllLayout';
+
 
 export const M_Reports = () => {
-    const [generating, setGenerating] = useState(false);
+   const [mosquitoFile, setMosquitoFile] = useState(null);
+  const [weatherFile, setWeatherFile] = useState(null);
 
-    // --- FUNCTION: Generate Official PDF Report ---
-    const generatePDF = async () => {
-        setGenerating(true);
+  const [mosquitoMessage, setMosquitoMessage] = useState("");
+  const [weatherMessage, setWeatherMessage] = useState("");
 
-        try {
-            // 1. Fetch latest data from your Python backend (use correct port)
-            const response = await fetch('http://127.0.0.1:5001/api/predict');
-            const data = await response.json();
+  const [processing, setProcessing] = useState(false);
 
-            // 2. Initialize PDF
-            const doc = new jsPDF();
-            const today = new Date().toLocaleDateString();
+  // ================= MOSQUITO UPLOAD =================
+  const handleMosquitoUpload = async () => {
+    if (!mosquitoFile) return alert("Please select a Mosquito CSV file.");
 
-            // 3. Header Section
-            doc.setFillColor(30, 64, 175); // Blue color (bg-blue-800)
-            doc.rect(0, 0, 210, 40, 'F'); // Blue header banner
+    const formData = new FormData();
+    formData.append("file", mosquitoFile);
 
-            doc.setTextColor(255, 255, 255);
-            doc.setFontSize(22);
-            doc.text("Gampaha MOH - Dengue Surveillance", 14, 20);
+    try {
+      setProcessing(true);
+      const res = await fetch("http://localhost:5000/api/users/upload-csv", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Upload failed ❌");
 
-            doc.setFontSize(12);
-            doc.text(`Weekly Intelligence Report • Generated: ${today}`, 14, 32);
+      setMosquitoMessage(data.message);
+      setMosquitoFile(null); // Clear file state after success
+      document.getElementById("mosquitoInput").value = ""; // Reset file input
+    } catch (err) {
+      setMosquitoMessage(err.message || "Upload failed ❌");
+    } finally {
+      setProcessing(false);
+    }
+  };
 
-            // 4. Executive Summary
-            doc.setTextColor(0, 0, 0);
-            doc.setFontSize(14);
-            doc.text("1. Executive Summary", 14, 55);
+  // ================= WEATHER UPLOAD =================
+  const handleWeatherUpload = async () => {
+    if (!weatherFile) return alert("Please select a Weather CSV file.");
 
-            doc.setFontSize(11);
-            doc.setTextColor(80, 80, 80);
-            const summaryText = "Based on the latest Machine Learning analysis using Random Forest Regression, the predicted mosquito density for the upcoming week shows a HIGH RISK trend. Immediate vector control measures are recommended in identified zones.";
-            doc.splitTextToSize(summaryText, 180).forEach((line, i) => {
-                doc.text(line, 14, 65 + (i * 6));
-            });
+    const formData = new FormData();
+    formData.append("file", weatherFile);
 
-            // 5. Prediction Data Table
-            doc.setFontSize(14);
-            doc.setTextColor(0, 0, 0);
-            doc.text("2. 7-Day Density Forecast", 14, 95);
+    try {
+      setProcessing(true);
+      const res = await fetch("http://localhost:5000/api/weather/upload-weather-csv", {
+        method: "POST",
+        body: formData,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || "Upload failed ❌");
 
-            // Create table columns and rows from your data
-            const tableColumn = ["Day", "Predicted Density Index (BI)", "Risk Status"];
-            const tableRows = Array.isArray(data) ? data.map(item => [
-                item.day,
-                item.predicted,
-                item.predicted > 70 ? "CRITICAL" : (item.predicted > 50 ? "High" : "Moderate")
-            ]) : [];
-
-            doc.autoTable({
-                head: [tableColumn],
-                body: tableRows,
-                startY: 100,
-                theme: 'grid',
-                headStyles: { fillColor: [30, 64, 175] }, // Match header blue
-                styles: { fontSize: 10, cellPadding: 3 },
-            });
-
-            // 6. Signature Area
-            const finalY = doc.lastAutoTable ? doc.lastAutoTable.finalY + 30 : 180;
-            doc.line(14, finalY, 80, finalY); // Line for signature
-            doc.setFontSize(10);
-            doc.text("Authorized Signature", 14, finalY + 5);
-            doc.text("Regional Epidemiologist", 14, finalY + 10);
-
-            // 7. Save File
-            doc.save(`MOH_Gampaha_Report_${today.replace(/\//g, '-')}.pdf`);
-
-        } catch (error) {
-            console.error("Report Generation Failed:", error);
-            alert("Failed to fetch data for the report. Is the backend running?");
-        } finally {
-            setGenerating(false);
-        }
-    };
+      setWeatherMessage(data.message);
+      setWeatherFile(null); // Clear file state after success
+      document.getElementById("weatherInput").value = ""; // Reset file input
+    } catch (err) {
+      setWeatherMessage(err.message || "Upload failed ❌");
+    } finally {
+      setProcessing(false);
+    }
+  };
 
     return (
         <AllLayout>
             <Navbar />
-            <div className="min-h-screen p-8">
-                <h1 className="mb-2 text-3xl font-bold text-gray-900">Reports & Intelligence</h1>
-                <p className="mb-8 text-gray-600">Export official surveillance documents for the Ministry of Health.</p>
+          <div className="flex flex-col items-center justify-center min-h-screen p-6 bg-gray-100">
+      {/* ================= UPLOAD CARDS ================= */}
+      <div className="grid w-full max-w-4xl grid-cols-1 gap-8 mb-10 md:grid-cols-2">
+        {/* Mosquito Upload */}
+        <div className="p-6 bg-white shadow-lg rounded-xl">
+          <h2 className="mb-4 text-xl font-bold text-center text-green-600">
+            Upload Mosquito CSV
+          </h2>
 
-                {/* --- ACTION CARD --- */}
-                <div className="p-8 bg-white border border-blue-100 shadow-lg rounded-xl">
-                    <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
-                        <div>
-                            <h3 className="text-xl font-bold text-blue-900">Weekly Forecast Report</h3>
-                            <p className="max-w-lg mt-2 text-gray-600">
-                                Generates a complete PDF dossier including the executive summary,
-                                7-day prediction table, and risk assessment signatures.
-                            </p>
-                        </div>
+          <input
+            id="mosquitoInput"
+            type="file"
+            accept=".csv"
+            onChange={(e) => setMosquitoFile(e.target.files[0])}
+            className="w-full p-2 mb-4 border rounded"
+          />
 
-                        <button
-                            onClick={generatePDF}
-                            disabled={generating}
-                            className={`flex items-center gap-3 px-6 py-4 font-bold text-white rounded-xl shadow-md transition-all ${generating ? 'bg-blue-400 cursor-wait' : 'bg-blue-600 hover:bg-blue-700 hover:scale-105'
-                                }`}
-                        >
-                            {generating ? <Loader2 className="w-6 h-6 animate-spin" /> : <Download className="w-6 h-6" />}
-                            {generating ? "Generating..." : "Download Official PDF"}
-                        </button>
-                    </div>
+          <button
+            onClick={handleMosquitoUpload}
+            disabled={processing}
+            className="w-full py-2 text-white bg-green-500 rounded hover:bg-green-600 disabled:opacity-50"
+          >
+            {processing ? "Processing..." : "Upload Mosquito Data"}
+          </button>
 
-                    {/* Divider */}
-                    <hr className="my-8 border-gray-100" />
+          {mosquitoMessage && (
+            <p className="mt-3 text-sm text-center text-green-700">
+              {mosquitoMessage}
+            </p>
+          )}
+        </div>
 
-                    <h3 className="mb-4 text-sm font-bold tracking-wider text-gray-400 uppercase">Archived Reports</h3>
-                    <ul className="space-y-3">
-                        <li className="flex items-center justify-between p-4 transition-colors border border-gray-100 rounded-lg cursor-pointer hover:bg-blue-50 group">
-                            <div className="flex items-center gap-3">
-                                <FileText className="text-gray-400 group-hover:text-blue-500" />
-                                <span className="font-medium text-gray-700">Week 52 - Dec 2025.pdf</span>
-                            </div>
-                            <span className="text-xs text-gray-400">2.4 MB</span>
-                        </li>
-                        <li className="flex items-center justify-between p-4 transition-colors border border-gray-100 rounded-lg cursor-pointer hover:bg-blue-50 group">
-                            <div className="flex items-center gap-3">
-                                <FileText className="text-gray-400 group-hover:text-blue-500" />
-                                <span className="font-medium text-gray-700">Week 51 - Dec 2025.pdf</span>
-                            </div>
-                            <span className="text-xs text-gray-400">2.1 MB</span>
-                        </li>
-                    </ul>
-                </div>
+        {/* Weather Upload */}
+        <div className="p-6 bg-white shadow-lg rounded-xl">
+          <h2 className="mb-4 text-xl font-bold text-center text-blue-600">
+            Upload Weather CSV
+          </h2>
 
-                {/* --- ADMIN ZONE --- */}
-                <div className="p-8 mt-8 bg-white border border-red-100 shadow-lg rounded-xl">
-                    <h3 className="flex items-center gap-2 mb-4 text-xl font-semibold text-gray-800">
-                        <Settings className="w-5 h-5" /> Admin Configuration
-                    </h3>
-                    <p className="mb-6 text-sm text-gray-500">Restricted access area for system calibration.</p>
+          <input
+            id="weatherInput"
+            type="file"
+            accept=".csv"
+            onChange={(e) => setWeatherFile(e.target.files[0])}
+            className="w-full p-2 mb-4 border rounded"
+          />
 
-                    <div className="flex gap-4">
-                        <button className="px-5 py-3 font-medium text-gray-700 transition-colors bg-gray-100 border border-gray-300 rounded-lg hover:bg-gray-200">
-                            Configure Model Parameters
-                        </button>
-                        <button className="flex items-center gap-2 px-5 py-3 font-medium text-white transition-colors bg-red-600 rounded-lg shadow-sm hover:bg-red-700">
-                            <Trash2 className="w-4 h-4" /> Reset Historical Data
-                        </button>
-                    </div>
-                </div>
-            </div>
+          <button
+            onClick={handleWeatherUpload}
+            disabled={processing}
+            className="w-full py-2 text-white bg-blue-500 rounded hover:bg-blue-600 disabled:opacity-50"
+          >
+            {processing ? "Processing..." : "Upload Weather Data"}
+          </button>
+
+          {weatherMessage && (
+            <p className="mt-3 text-sm text-center text-blue-700">
+              {weatherMessage}
+            </p>
+          )}
+        </div>
+      </div>
+
+      {/* ================= CSV GUIDELINES ================= */}
+      <div className="w-full max-w-4xl p-6 bg-white shadow-lg rounded-xl">
+        <h2 className="mb-4 text-lg font-bold text-gray-800">
+          CSV Upload Guidelines
+        </h2>
+        <ul className="space-y-2 text-gray-700 list-disc list-inside">
+          <li>
+            <strong>Mosquito CSV:</strong> Include columns <code>Location, Year, Month, Cumulative</code>.
+          </li>
+          <li>
+            <strong>Weather CSV:</strong> Include columns <code>Year, Month, Rainfall, Humidity, Temperature</code>.
+          </li>
+          <li>
+            <strong>Filename conventions:</strong>
+            <ul className="ml-6 list-disc list-inside">
+              <li>For Kelaniya: <code>Kelaniya_weather_clean.csv</code></li>
+              <li>For Negombo: <code>Negombo_weather_clean.csv</code></li>
+            </ul>
+          </li>
+          <li>
+            Ensure CSV does not contain empty rows or invalid values. Missing location or year/month will cause upload errors.
+          </li>
+          <li>
+            After upload, data will be immediately processed and saved to the database.
+          </li>
+        </ul>
+      </div>
+    </div>
         </AllLayout>
     );
 };
