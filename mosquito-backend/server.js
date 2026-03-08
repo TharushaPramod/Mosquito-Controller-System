@@ -1,23 +1,57 @@
 const express = require('express');
-const cors = require('cors');
+const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const connectDB = require('./config/db');
-const mosquitoRoutes = require('./routes/mosquitoRoutes');
+const cors = require('cors');
+const userRoutes = require("./routes/Csvroute");
+const predictionRoutes = require("./routes/predictionRoutes");
+const weatherRoutes = require("./routes/weatherRoutes");
 
 dotenv.config();
-connectDB();
 
 const app = express();
-app.use(cors());
-app.use(express.json());
 
-// test route
-app.get("/", (req, res) => {
-  res.send("Backend API running...");
+app.use(express.json());
+app.use(cors());
+
+
+
+// Health check / root route
+app.get('/', (req, res) => {
+  res.send('Server is up and MongoDB connected successfully ✅');
 });
 
-// Import Mosquito Routes
-app.use('/api', mosquitoRoutes);
+// Connect to MongoDB only once
+if (!mongoose.connection.readyState) {
+  mongoose.connect(process.env.MONGO)
+    .then(() => console.log('MongoDB connected ✅'))
+    .catch((err) => console.error('MongoDB connection error ❌', err));
+}
 
-const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.use("/api/users", userRoutes);
+app.use("/api", predictionRoutes);
+app.use("/api/weather", weatherRoutes);
+console.log("userRoutes:", typeof userRoutes);
+console.log("predictionRoutes:", typeof predictionRoutes);
+console.log("weatherRoutes:", typeof weatherRoutes);
+
+
+
+// Error middleware
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+  const message = err.message || 'Internal Server Error';
+  res.status(statusCode).json({
+    success: false,
+    statusCode,
+    message,
+  });
+});
+
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on port ${PORT}`);
+});
+
+module.exports = app;
