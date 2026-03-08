@@ -10,18 +10,19 @@ import Alerts from './pages/Alerts';
 //import Map from './pages/Map';
 import Reports from './pages/Reports';
 import MosquitoDashboard from './pages/MosquitoDashboard';
-import Sidebar from './components/Layout/Sidebar';
+
+import DeviceControll from './pages/DeviceControll';
 import { DashboardHome } from './pages/Mosquito_Density/DashboardHome';
 import { ForecastChart } from './pages/Mosquito_Density/ForecastChart';
-import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
 import { M_Reports } from './pages/Mosquito_Density/Reports';
+import { SpatialMap } from './pages/Mosquito_Density/SpatialMap';
 
 function App() {
   return (
 
 
     <Router>
-      <Sidebar />
+      
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
@@ -39,6 +40,9 @@ function App() {
         <Route path="/forecast" element={<ForecastChart />} />
         <Route path="/m_reports" element={<M_Reports />} />
         <Route path="/spatialmap" element={<SpatialMap />} />
+        <Route path = '/mosquito-dashboard' element={<MosquitoDashboard/>} />
+        <Route path = '/deviceControll-dashboard' element={<DeviceControll/>} />
+
       </Routes>
     </Router>
 
