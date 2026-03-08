@@ -138,7 +138,7 @@ const MosquitoDashboard = () => {
           <StatCard title="Anopheles (Malaria)" count={currentMetrics.anopheles} color="border-orange-500" />
           <StatCard title="Culex (Nuisance)" count={currentMetrics.culex} color="border-blue-500" />
           <StatCard title="Other Mosquitoes" count={currentMetrics.other} color="border-gray-500" />
-          <StatCard title="Insects (Non-Target)" count={currentMetrics.insects} color="border-green-500" />
+          <StatCard title="Non-Mosquitoes (Non-Target)" count={currentMetrics.insects} color="border-green-500" />
         </div>
 
         {/* --- Chart --- */}
