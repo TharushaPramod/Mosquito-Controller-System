@@ -8,17 +8,16 @@ import TrendChart from '../components/Dashboard/TrendChart';
 import AlertsList from '../components/Dashboard/AlertsList';
 import ForecastChart from '../components/Dashboard/ForecastChart';
 import UploadHealthDataModal from './UploadHealthDataModal';
-import SubmissionStatusModal from './SubmissionStatusModal';
+
 import { CloudUpload, Search, ShieldCheck, Database, Zap, Activity, Info } from 'lucide-react';
 import riskForecastImage from '../assets/images/risk-forecast.png';
 import uploadHealthDataImage from '../assets/images/upload-health-data.png';
 
-const BASE = import.meta.env.VITE_API_URL;
-
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:5002/api';
 const Dashboard = () => {
     const navigate = useNavigate();
     const [showUploadModal, setShowUploadModal] = React.useState(false);
-    const [showSubmissionModal, setShowSubmissionModal] = React.useState(false);
+
     const [stats, setStats] = React.useState(null);
     const [statsLoading, setStatsLoading] = React.useState(true);
 
@@ -110,13 +109,13 @@ const Dashboard = () => {
                         loading={statsLoading}
                     />
                     <StatCard
-                        title="Facility Sync"
-                        value={statsLoading ? '—' : (stats?.pendingReports ?? 0)}
-                        trend="up"
-                        trendValue="Live"
-                        trendLabel="status check"
-                        linkText="Manage Reports"
-                        onClick={() => setShowSubmissionModal(true)}
+                        title="Total Deaths"
+                        value={statsLoading ? '—' : (stats?.totalDeaths ?? 0)}
+                        trend="down"
+                        trendValue="Sri Lanka"
+                        trendLabel="all time"
+                        linkText="View Reports"
+                        onClick={() => navigate('/reports')}
                         loading={statsLoading}
                     />
                 </div>
@@ -266,7 +265,6 @@ const Dashboard = () => {
 
             {/* Modals */}
             {showUploadModal && <UploadHealthDataModal onClose={() => setShowUploadModal(false)} />}
-            {showSubmissionModal && <SubmissionStatusModal onClose={() => setShowSubmissionModal(false)} />}
         </DashboardLayout>
     );
 };

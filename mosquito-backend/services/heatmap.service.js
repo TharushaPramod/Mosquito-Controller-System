@@ -192,23 +192,26 @@ const getTimeSeriesHeatmap = async (diseaseType = null, weeks = 12) => {
 // GET /api/heatmap/dashboard-stats — for StatCards
 const getDashboardStats = async () => {
     const now = new Date();
-    const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+    // Use UTC-based today boundary so records saved as UTC midnight are included
+    const todayUTC = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
     const weekAgo = new Date(Date.now() - 7 * 24 * 3600000);
     const prevWeek = new Date(Date.now() - 14 * 24 * 3600000);
 
-    const [todayStats, thisWeek, lastWeek] = await Promise.all([
-        CaseReport.aggregate([{ $match: { reportedAt: { $gte: today } } },
+    const [todayStats, thisWeek, lastWeek, allTimeDeaths] = await Promise.all([
+        CaseReport.aggregate([{ $match: { reportedAt: { $gte: todayUTC } } },
         { $group: { _id: null, cases: { $sum: "$caseCount" }, deaths: { $sum: "$deathCount" } } }]),
         CaseReport.aggregate([{ $match: { reportedAt: { $gte: weekAgo } } },
         { $group: { _id: null, total: { $sum: "$caseCount" } } }]),
         CaseReport.aggregate([{ $match: { reportedAt: { $gte: prevWeek, $lt: weekAgo } } },
         { $group: { _id: null, total: { $sum: "$caseCount" } } }]),
+        CaseReport.aggregate([{ $group: { _id: null, total: { $sum: "$deathCount" } } }]),
     ]);
 
     const todayVal = todayStats[0]?.cases || 0;
     const todayDeaths = todayStats[0]?.deaths || 0;
     const thisWeekVal = thisWeek[0]?.total || 0;
     const lastWeekVal = lastWeek[0]?.total || 0;
+    const totalDeaths = allTimeDeaths[0]?.total || 0;
 
     const weekChange = lastWeekVal === 0
         ? (thisWeekVal > 0 ? 100 : 0)
@@ -234,6 +237,7 @@ const getDashboardStats = async () => {
     return {
         todayCases: todayVal,
         todayDeaths: todayDeaths,
+        totalDeaths: totalDeaths,
         thisWeekCases: thisWeekVal,
         weekChange,
         activeOutbreaks: activeDistricts.length,
@@ -432,8 +436,8 @@ const getReportStats = async () => {
 const getSubmissionStatus = async () => {
     const Hospital = require("../models/hospital");
     const now = new Date();
-    const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-    const todayEnd = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 59, 59, 999);
+    const todayStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    const todayEnd = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), 23, 59, 59, 999));
 
     const allHospitals = await Hospital.find({ status: { $ne: 'Inactive' } }).lean();
     const todayReports = await CaseReport.find({

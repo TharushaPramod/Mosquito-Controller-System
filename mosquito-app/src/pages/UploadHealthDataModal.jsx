@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { X, Upload, CheckCircle, AlertCircle, Loader, Activity, Users, Shield, FileText } from 'lucide-react';
 
-const BASE = import.meta.env.VITE_API_URL;
+
+const BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:5002/api';
 
 const DISTRICTS = [
     'Ampara', 'Anuradhapura', 'Badulla', 'Batticaloa', 'Colombo', 'Galle', 'Gampaha',
