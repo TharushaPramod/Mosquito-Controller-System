@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Navbar from '../../components/Mosquito_Density/Navbar';
+import Navbar from '../../Components/Mosquito_Density/Navbar';
 import AllLayout from '../../Components/Layout/AllLayout';
 
 

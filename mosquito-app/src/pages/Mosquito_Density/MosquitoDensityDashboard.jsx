@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { LayoutDashboard, Table2, Map, FileText, ShieldAlert } from "lucide-react";
-import Navbar from "../../components/Mosquito_Density/Navbar";
+import Navbar from "../../Components/Mosquito_Density/Navbar";
 import AllLayout from "../../Components/Layout/AllLayout";
 
 const cardItems = [

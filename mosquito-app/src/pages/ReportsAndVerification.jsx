@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import DashboardLayout from '../components/Layout/DashboardLayout';
+import DashboardLayout from '../Components/Layout/DashboardLayout';
 import {
     FileText, Clock, BarChart3, Search, Filter, RefreshCw, Loader2, Download,
     CheckCircle2, XCircle, Info, PieChart, Activity

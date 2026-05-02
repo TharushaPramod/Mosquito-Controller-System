@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import DashboardLayout from '../components/Layout/DashboardLayout';
+import DashboardLayout from '../Components/Layout/DashboardLayout';
 import {
     AlertTriangle, Bell, Search, Filter, Calendar,
     ChevronRight, CheckCircle2, Info, AlertCircle, RefreshCw, Users

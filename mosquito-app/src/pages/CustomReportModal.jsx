@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { X, FileText, Download, Loader2 } from 'lucide-react';
-import { generateReportPDF } from '../components/Utils/generateReportPDF';
+import { generateReportPDF } from '../Components/Utils/generateReportPDF';
 import clsx from 'clsx';
 
 const BASE = import.meta.env.VITE_API_URL;

@@ -4,7 +4,7 @@ import {
     Search, ChevronDown, Download, Plus, Eye, Edit2, Trash2,
     ChevronLeft, ChevronRight, Calendar, FileText, RefreshCw, Loader2
 } from 'lucide-react';
-import DashboardLayout from '../components/Layout/DashboardLayout';
+import DashboardLayout from '../Components/Layout/DashboardLayout';
 import AddFacilityModal from './AddFacilityModal';
 import {
     LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip,

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import DashboardLayout from '../components/Layout/DashboardLayout';
-import SriLankaMap from '../components/Dashboard/SriLankaMap';
-import ForecastMap from '../components/Dashboard/ForecastMap'; // ← NEW
+import DashboardLayout from '../Components/Layout/DashboardLayout';
+import SriLankaMap from '../Components/Dashboard/SriLankaMap';
+import ForecastMap from '../Components/Dashboard/ForecastMap'; // ← NEW
 import districtData from '/src/assets/data/sri-lanka-districts.json';
 import {
     Locate,

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, ArrowLeft, Loader2, RefreshCw, Plus, Edit2, Trash2 } from 'lucide-react';
 import { useNavigate, useParams } from 'react-router-dom';
-import DashboardLayout from '../components/Layout/DashboardLayout';
+import DashboardLayout from '../Components/Layout/DashboardLayout';
 import AddReportModal from './AddReportModal';
 import EditReportModal from './EditReportModal';
 import {

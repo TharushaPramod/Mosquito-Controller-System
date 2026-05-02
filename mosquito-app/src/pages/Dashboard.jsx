@@ -1,10 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '../components/Layout/DashboardLayout';
-import StatCard from '../components/Dashboard/StatCard';
-import HeatmapSection from '../components/Dashboard/HeatmapSection';
+import DashboardLayout from '../Components/Layout/DashboardLayout';
+import StatCard from '../Components/Dashboard/StatCard';
+import HeatmapSection from '../Components/Dashboard/HeatmapSection';
 
-import ForecastChart from '../components/Dashboard/ForecastChart';
+import ForecastChart from '../Components/Dashboard/ForecastChart';
 import UploadHealthDataModal from './UploadHealthDataModal';
 
 import { CloudUpload, Search, Zap, Info, Activity, Map as MapIcon, Calendar, Filter } from 'lucide-react';

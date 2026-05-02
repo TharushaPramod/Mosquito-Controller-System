@@ -14,7 +14,7 @@ import {
 
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
-import Navbar from "../../components/Mosquito_Density/Navbar.jsx";
+import Navbar from "../../Components/Mosquito_Density/Navbar.jsx";
 import AllLayout from "../../Components/Layout/AllLayout.jsx";
 
 export const Analysis = () => {

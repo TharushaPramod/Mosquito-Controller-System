@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import Footer from '../components/Layout/Footer';
+import Footer from '../Components/Layout/Footer';
 
 const Login = () => {
     const [showPassword, setShowPassword] = useState(false);

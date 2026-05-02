@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { MapContainer, TileLayer, Circle, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import Navbar from '../../components/Mosquito_Density/Navbar';
+import Navbar from '../../Components/Mosquito_Density/Navbar';
 import AllLayout from '../../Components/Layout/AllLayout';
 
 export const SpatialMap = () => {
