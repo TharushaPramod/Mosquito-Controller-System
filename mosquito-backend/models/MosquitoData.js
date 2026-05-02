@@ -1,4 +1,5 @@
-const mongoose = require('mongoose');
+const { sharedDB } = require("../config/db");
+const mongoose = require("mongoose");
 
 const mosquitoSchema = new mongoose.Schema({
   location: String,
@@ -7,4 +8,4 @@ const mosquitoSchema = new mongoose.Schema({
   cumulative: Number
 });
 
-module.exports = mongoose.model('MosquitoData', mosquitoSchema);
+module.exports = sharedDB.model('MosquitoData', mosquitoSchema);

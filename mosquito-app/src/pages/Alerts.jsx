@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import DashboardLayout from '../components/Layout/DashboardLayout';
 import {
     AlertTriangle, Bell, Search, Filter, Calendar,
-    ChevronRight, CheckCircle2, Info, AlertCircle, RefreshCw
+    ChevronRight, CheckCircle2, Info, AlertCircle, RefreshCw, Users
 } from 'lucide-react';
 import clsx from 'clsx';
+import PHIAllocationPanel from './PHIAllocationPanel';
 
 const BASE = import.meta.env.VITE_API_URL;
 
@@ -56,6 +57,7 @@ const AlertRow = ({ alert }) => {
 };
 
 const Alerts = () => {
+    const [pageTab, setPageTab] = useState('alerts'); // 'alerts' | 'deployment'
     const [activeTab, setActiveTab] = useState('All');
     const [searchQuery, setSearchQuery] = useState('');
     const [alertsData, setAlertsData] = useState([]);
@@ -104,6 +106,42 @@ const Alerts = () => {
     return (
         <DashboardLayout title="Health Notifications & Alerts">
             <div className="flex flex-col gap-6 max-w-5xl mx-auto">
+
+                {/* ── Page-level tab switcher ──────────────────────── */}
+                <div className="flex items-center gap-2 bg-white rounded-2xl p-1.5 border border-gray-100 shadow-sm w-fit">
+                    <button
+                        onClick={() => setPageTab('alerts')}
+                        className={clsx(
+                            'flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-extrabold uppercase tracking-wider transition-all',
+                            pageTab === 'alerts'
+                                ? 'bg-[#2F6A5F] text-white shadow-md shadow-[#2F6A5F]/20'
+                                : 'text-gray-400 hover:text-gray-600'
+                        )}
+                    >
+                        <Bell size={13} />
+                        Alerts
+                    </button>
+                    <button
+                        onClick={() => setPageTab('deployment')}
+                        className={clsx(
+                            'flex items-center gap-2 px-4 py-2 rounded-xl text-[11px] font-extrabold uppercase tracking-wider transition-all',
+                            pageTab === 'deployment'
+                                ? 'bg-[#2F6A5F] text-white shadow-md shadow-[#2F6A5F]/20'
+                                : 'text-gray-400 hover:text-gray-600'
+                        )}
+                    >
+                        <Users size={13} />
+                        Field Deployment
+                    </button>
+                </div>
+
+                {/* ── FIELD DEPLOYMENT tab ─────────────────────────── */}
+                {pageTab === 'deployment' && (
+                    <PHIAllocationPanel />
+                )}
+
+                {/* ── ALERTS tab ───────────────────────────────────── */}
+                {pageTab === 'alerts' && (<>
 
                 {/* Summary badges */}
                 {!loading && alertsData.length > 0 && (
@@ -206,6 +244,8 @@ const Alerts = () => {
                         </button>
                     </div>
                 )}
+
+                </>)}
 
             </div>
         </DashboardLayout>

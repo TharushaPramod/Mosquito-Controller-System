@@ -1,4 +1,5 @@
 // models/prediction.js
+const { denguesafeDB } = require("../config/db");
 const mongoose = require("mongoose");
 
 // One document = one district's weekly forecast row
@@ -55,4 +56,4 @@ predictionSchema.statics.getRiskLevel = function (cases) {
     return "low";
 };
 
-module.exports = mongoose.model("Prediction", predictionSchema);
+module.exports = denguesafeDB.model("Prediction", predictionSchema);

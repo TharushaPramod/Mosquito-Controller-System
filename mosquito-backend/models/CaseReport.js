@@ -1,3 +1,4 @@
+const { denguesafeDB } = require("../config/db");
 const mongoose = require("mongoose");
 
 const caseReportSchema = new mongoose.Schema({
@@ -39,4 +40,4 @@ const caseReportSchema = new mongoose.Schema({
     verified: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model("CaseReport", caseReportSchema);
+module.exports = denguesafeDB.model("CaseReport", caseReportSchema);

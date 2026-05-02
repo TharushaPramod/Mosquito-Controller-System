@@ -47,7 +47,7 @@ export const Analysis = () => {
 
   const fetchData = async () => {
     try {
-      const actualRes = await fetch("http://localhost:5000/api/users/get");
+      const actualRes = await fetch("http://localhost:5002/api/users/get");
       const actualData = await actualRes.json();
       const kelActual = actualData.data.filter((d) => d.location === "Kelaniya");
       const negActual = actualData.data.filter((d) => d.location === "Negombo");
@@ -55,9 +55,42 @@ export const Analysis = () => {
       setKelaniyaData(formatActual(kelActual));
       setNegomboData(formatActual(negActual));
 
-      const kelPredRes = await fetch("http://localhost:5000/api/predict/Kelaniya");
+      // Fetch weather data
+      const weatherRes = await fetch("http://localhost:5002/api/users/getWeather");
+      const weatherData = await weatherRes.json();
+      const kelWeather = weatherData.data.filter((d) => d.location === "Kelaniya");
+      const negWeather = weatherData.data.filter((d) => d.location === "Negombo");
+
+      // Merge mosquito + weather by year/month
+      const mergeData = (mosquito, weather) =>
+        mosquito.map((m) => {
+          const w = weather.find((w) => w.year === m.year && w.month === m.month) || {};
+          return {
+            year: m.year,
+            month: m.month,
+            cumulative: m.cumulative,
+            rainfall: w.rainfall || 0,
+            humidity: w.humidity || 0,
+            temperature: w.temperature || 0,
+          };
+        });
+
+      const kelMerged = mergeData(kelActual, kelWeather);
+      const negMerged = mergeData(negActual, negWeather);
+
+      // Send merged data to Flask
+      const kelPredRes = await fetch("http://localhost:5001/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(kelMerged),
+      });
       const kelPredData = await kelPredRes.json();
-      const negPredRes = await fetch("http://localhost:5000/api/predict/Negombo");
+
+      const negPredRes = await fetch("http://localhost:5001/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(negMerged),
+      });
       const negPredData = await negPredRes.json();
 
       setKelaniyaPred(formatPrediction(kelPredData.predictions, 2026));
@@ -146,11 +179,11 @@ export const Analysis = () => {
     selectedYear === "all"
       ? allMergedData
       : filteredKelaniya.map((item, index) => ({
-          year: item.date.split("-")[0],
-          month: item.date.split("-")[1],
-          Kelaniya: item.prediction || item.actual || 0,
-          Negombo: filteredNegombo[index]?.prediction || filteredNegombo[index]?.actual || 0,
-        }));
+        year: item.date.split("-")[0],
+        month: item.date.split("-")[1],
+        Kelaniya: item.prediction || item.actual || 0,
+        Negombo: filteredNegombo[index]?.prediction || filteredNegombo[index]?.actual || 0,
+      }));
 
   const downloadPDF = () => {
     const doc = new jsPDF();
@@ -210,8 +243,8 @@ export const Analysis = () => {
           ? kelCombined
           : kelCombined.filter((item) => item.date.startsWith(selectedYear))
         : selectedYear === "all"
-        ? negCombined
-        : negCombined.filter((item) => item.date.startsWith(selectedYear));
+          ? negCombined
+          : negCombined.filter((item) => item.date.startsWith(selectedYear));
 
     const title =
       selectedYear === "all"
@@ -247,8 +280,8 @@ export const Analysis = () => {
           ? kelCombined
           : kelCombined.filter((item) => item.date.startsWith(selectedYear))
         : selectedYear === "all"
-        ? negCombined
-        : negCombined.filter((item) => item.date.startsWith(selectedYear));
+          ? negCombined
+          : negCombined.filter((item) => item.date.startsWith(selectedYear));
 
     const rows = [
       ["Date", "Actual", "Predicted"],

@@ -104,6 +104,78 @@ router.get("/", async (req, res) => {
     }
 });
 
+// GET /api/case-reports/count — Get total count
+router.get("/count", async (req, res) => {
+    try {
+        const count = await CaseReport.countDocuments();
+        res.json({ success: true, count });
+    } catch (e) {
+        res.status(500).json({ success: false, message: e.message });
+    }
+});
+
+// GET /api/case-reports/stats — Get analytics stats
+router.get("/stats", async (req, res) => {
+    try {
+        const totalReports = await CaseReport.countDocuments();
+        const verifiedReports = await CaseReport.countDocuments({ verified: true });
+        const mlRecords = await CaseReport.countDocuments({ source: "ML Gap-Fill" });
+
+        // Calculate average cases per week
+        const casesByWeek = await CaseReport.aggregate([
+            { $group: { _id: { year: "$year", week: "$weekNumber" }, total: { $sum: "$caseCount" } } }
+        ]);
+        const avgCasesPerWeek = casesByWeek.length ? Math.round(casesByWeek.reduce((acc, curr) => acc + curr.total, 0) / casesByWeek.length) : 0;
+
+        // Cases by district
+        const districtCases = await CaseReport.aggregate([
+            { $group: { _id: "$district", count: { $sum: "$caseCount" } } },
+            { $sort: { count: -1 } }
+        ]);
+        const mostAffected = districtCases.length ? districtCases[0]._id : "N/A";
+        const top10Districts = districtCases.slice(0, 10).map(d => ({ district: d._id || "Unknown", cases: d.count }));
+
+        // Accuracy timeline
+        const monthlyStats = await CaseReport.aggregate([
+            {
+                $group: {
+                    _id: { year: "$year", month: "$month" },
+                    total: { $sum: 1 },
+                    verified: { $sum: { $cond: ["$verified", 1, 0] } }
+                }
+            },
+            { $sort: { "_id.year": 1, "_id.month": 1 } }
+        ]);
+
+        const accuracyTimeline = monthlyStats.map(m => {
+            const date = new Date(m._id.year, m._id.month - 1);
+            const monthStr = date.toLocaleString('default', { month: 'short' }) + ' ' + date.getFullYear().toString().slice(-2);
+            return {
+                month: monthStr,
+                accuracy: m.total > 0 ? Math.round((m.verified / m.total) * 100) : 0
+            };
+        });
+
+        const dataAccuracy = totalReports > 0 ? Math.round((verifiedReports / totalReports) * 100) : 0;
+
+        res.json({
+            success: true,
+            data: {
+                totalReports,
+                verifiedReports,
+                mlRecords,
+                avgCasesPerWeek,
+                mostAffected,
+                top10Districts,
+                accuracyTimeline,
+                dataAccuracy
+            }
+        });
+    } catch (e) {
+        res.status(500).json({ success: false, message: e.message });
+    }
+});
+
 // GET /api/case-reports/:id — Get single report
 router.get("/:id", async (req, res) => {
     try {

@@ -1,4 +1,5 @@
 // models/Hospital.js
+const { denguesafeDB } = require("../config/db");
 const mongoose = require("mongoose");
 
 const HospitalSchema = new mongoose.Schema({
@@ -16,4 +17,4 @@ const HospitalSchema = new mongoose.Schema({
     lastReportAt: { type: Date, default: null },
 }, { timestamps: true });
 
-module.exports = mongoose.models.Hospital || mongoose.model("Hospital", HospitalSchema);
+module.exports = denguesafeDB.models.Hospital || denguesafeDB.model("Hospital", HospitalSchema);

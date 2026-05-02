@@ -1,3 +1,4 @@
+const { sharedDB } = require("../config/db");
 const mongoose = require("mongoose");
 
 const weatherSchema = new mongoose.Schema({
@@ -9,4 +10,4 @@ const weatherSchema = new mongoose.Schema({
   temperature: Number
 });
 
-module.exports = mongoose.model("WeatherData", weatherSchema);
+module.exports = sharedDB.model("WeatherData", weatherSchema);

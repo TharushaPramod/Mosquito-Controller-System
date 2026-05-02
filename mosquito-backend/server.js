@@ -1,10 +1,17 @@
 require("dotenv").config();
 const app = require("./app");
-const connectDB = require("./config/db");
+
 
 const PORT = process.env.PORT || 5002;
 
-connectDB();
+require("./config/db");
+
+const cors = require("cors");
+app.use(cors({
+  origin: "*",
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 app.listen(PORT, () => {
   console.log("Smart Mosquito Control Backend");

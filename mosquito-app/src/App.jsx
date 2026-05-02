@@ -8,8 +8,7 @@ import DataIntegration from './pages/DataIntegration';
 import FacilityDetail from './pages/FacilityDetail';
 import Alerts from './pages/Alerts';
 import Map from './pages/Map';
-import Reports from './pages/Reports';
-import Verification from './pages/Verification';
+import ReportsAndVerification from './pages/ReportsAndVerification';
 import MosquitoDashboard from './pages/MosquitoDashboard';
 
 import DeviceControll from './pages/DeviceControll';
@@ -36,8 +35,7 @@ function App() {
         <Route path="/facility/:id" element={<FacilityDetail />} />
         <Route path="/alerts" element={<Alerts />} />
         <Route path="/map" element={<Map />} />
-        <Route path="/reports" element={<Reports />} />
-        <Route path="/verification" element={<Verification />} />
+        <Route path="/reports-verification" element={<ReportsAndVerification />} />
 
         <Route path='/mosquito-dashboard' element={<MosquitoDashboard />} />
 

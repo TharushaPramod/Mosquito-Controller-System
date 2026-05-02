@@ -11,8 +11,7 @@ const NavigationTabs = () => {
         { label: 'Dashboard', icon: LayoutDashboard, path: '/' },
         { label: 'Data Integration', icon: Layers, path: '/data-integration' },
         { label: 'Alerts', icon: AlertCircle, path: '/alerts' },
-        { label: 'Reports', icon: FileText, path: '/reports' },
-        { label: 'Verification', icon: CheckCircle, path: '/verification' },
+        { label: 'Reports & Verification', icon: FileText, path: '/reports-verification' },
         { label: 'Map', icon: MapIcon, path: '/map' },
     ];
 
@@ -20,8 +19,7 @@ const NavigationTabs = () => {
         if (location.pathname === '/') return 'Dashboard';
         if (location.pathname.startsWith('/data-integration') || location.pathname.startsWith('/facility')) return 'Data Integration';
         if (location.pathname.startsWith('/alerts')) return 'Alerts';
-        if (location.pathname.startsWith('/reports')) return 'Reports';
-        if (location.pathname.startsWith('/verification')) return 'Verification';
+        if (location.pathname.startsWith('/reports-verification')) return 'Reports & Verification';
         if (location.pathname.startsWith('/map')) return 'Map';
         return 'Dashboard';
     };

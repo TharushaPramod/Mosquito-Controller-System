@@ -1,3 +1,4 @@
+const { denguesafeDB } = require("../config/db");
 const mongoose = require("mongoose");
 
 const alertSchema = new mongoose.Schema({
@@ -18,4 +19,4 @@ const alertSchema = new mongoose.Schema({
     sentToFCM: { type: Boolean, default: false }
 });
 
-module.exports = mongoose.model("Alert", alertSchema);
+module.exports = denguesafeDB.model("Alert", alertSchema);
