@@ -13,14 +13,11 @@ const fetchHeatmap = async (diseaseType) => {
 
 const RISK_COLOR = { high: '#EF4444', medium: '#F97316', low: '#2F6A5F' };
 
-// Normalize district name for matching
-// GeoJSON may say "Colombo District", "Nuwara-Eliya", etc.
-// MongoDB has "Colombo", "Nuwara Eliya", etc.
 const normalizeName = (name = '') =>
     name.toLowerCase()
-        .replace(/\s*district\s*/gi, '')   // remove " District"
-        .replace(/[-_]/g, ' ')             // hyphens → spaces
-        .replace(/\s+/g, ' ')              // collapse spaces
+        .replace(/\s*district\s*/gi, '')
+        .replace(/[-_]/g, ' ')
+        .replace(/\s+/g, ' ')
         .trim();
 
 const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
@@ -35,7 +32,6 @@ const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
             .finally(() => setLoading(false));
     }, [diseaseType]);
 
-    // Build a normalized lookup map for fast matching
     const riskMap = useMemo(() => {
         const map = {};
         riskData.forEach(d => {
@@ -51,8 +47,8 @@ const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
         const isGapFill = match?.isGapFill || false;
         return {
             fillColor: RISK_COLOR[risk] || '#2F6A5F',
-            fillOpacity: isGapFill ? 0.45 : 0.72,
-            weight: 1,
+            fillOpacity: isGapFill ? 0.35 : 0.65,
+            weight: 1.5,
             color: 'white',
         };
     };
@@ -67,27 +63,33 @@ const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
         const color = RISK_COLOR[risk] || '#2F6A5F';
 
         layer.bindPopup(
-            '<div style="min-width:170px;font-family:sans-serif">' +
-            '<h3 style="font-weight:700;font-size:14px;margin:0 0 6px">' + rawName + '</h3>' +
-            '<p style="font-size:12px;margin:2px 0">Risk: <strong style="color:' + color + '">' + risk.toUpperCase() + '</strong></p>' +
-            (realCases > 0
-                ? '<p style="font-size:12px;margin:2px 0">Cases (30d): <strong>' + realCases + '</strong></p>'
-                : '<p style="font-size:12px;margin:2px 0;color:#888">No recent real data</p>'
-            ) +
-            (predCases > 0
-                ? '<p style="font-size:11px;margin:2px 0;color:#6366f1">ML Forecast: ~<strong>' + Math.round(predCases) + '</strong> cases</p>'
-                : ''
-            ) +
-            (isGapFill
-                ? '<p style="font-size:10px;color:#aaa;margin-top:5px;border-top:1px solid #eee;padding-top:4px">⚠ Coloured from ML gap-fill prediction</p>'
-                : ''
-            ) +
-            '</div>'
+            `<div style="min-width:180px; font-family:'Outfit', sans-serif; padding: 4px;">
+                <h3 style="font-weight:900; font-size:15px; margin:0 0 8px; color:#1A3D37; text-transform:uppercase; letter-spacing:0.05em;">${rawName}</h3>
+                <div style="display:flex; flex-direction:column; gap:6px;">
+                    <div style="display:flex; align-items:center; justify-content:between;">
+                        <span style="font-size:10px; font-weight:700; color:#9ca3af; text-transform:uppercase;">Risk Level</span>
+                        <span style="font-size:10px; font-weight:900; color:${color}; text-transform:uppercase;">${risk}</span>
+                    </div>
+                    <div style="display:flex; align-items:center; justify-content:between; border-top:1px solid #f3f4f6; padding-top:6px;">
+                        <span style="font-size:10px; font-weight:700; color:#9ca3af; text-transform:uppercase;">Confirmed</span>
+                        <span style="font-size:11px; font-weight:900; color:#1A3D37;">${realCases}</span>
+                    </div>
+                    ${predCases > 0 ? `
+                    <div style="display:flex; align-items:center; justify-content:between;">
+                        <span style="font-size:10px; font-weight:700; color:#9ca3af; text-transform:uppercase;">Forecast</span>
+                        <span style="font-size:11px; font-weight:900; color:#6366f1;">~${Math.round(predCases)}</span>
+                    </div>` : ''}
+                    ${isGapFill ? `
+                    <div style="margin-top:4px; padding:4px 8px; background:#fef2f2; border-radius:6px; font-size:9px; color:#ef4444; font-weight:700; text-align:center;">
+                        ML GAP-FILL ACTIVE
+                    </div>` : ''}
+                </div>
+            </div>`
         );
 
         layer.on({
-            mouseover: e => e.target.setStyle({ fillOpacity: 0.92, weight: 2, color: '#FCD34D' }),
-            mouseout: e => e.target.setStyle({ fillOpacity: isGapFill ? 0.45 : 0.72, weight: 1, color: 'white' }),
+            mouseover: e => e.target.setStyle({ fillOpacity: 0.85, weight: 2.5, color: '#FCD34D' }),
+            mouseout: e => e.target.setStyle({ fillOpacity: isGapFill ? 0.35 : 0.65, weight: 1.5, color: 'white' }),
         });
     };
 
@@ -102,21 +104,22 @@ const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
         };
     }, [selectedDistrict]);
 
-    const gapFillCount = riskData.filter(d => d.isGapFill).length;
-
     return (
-        <div style={{ position: 'relative', height: '100%', width: '100%' }}>
+        <div style={{ position: 'relative', height: '100%', width: '100%', background: '#F8FAFC' }}>
             {loading && (
-                <div style={{ position: 'absolute', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.6)', borderRadius: '0.75rem' }}>
-                    <span style={{ fontSize: 12, color: '#2F6A5F', fontWeight: 700 }}>Loading map data...</span>
+                <div style={{ position: 'absolute', inset: 0, zIndex: 999, display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(4px)' }}>
+                    <div style={{ padding: '12px 24px', background: 'white', borderRadius: '1rem', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)', border: '1px solid #f1f5f9', display: 'flex', itemsCenter: 'center', gap: '10px' }}>
+                        <div className="w-4 h-4 border-2 border-[#2F6A5F] border-t-transparent rounded-full animate-spin"></div>
+                        <span style={{ fontSize: 11, color: '#1A3D37', fontWeight: 900, textTransform: 'uppercase', letterSpacing: '0.1em' }}>Updating Map Matrix</span>
+                    </div>
                 </div>
             )}
 
-            <MapContainer center={[7.8731, 80.7718]} zoom={7} scrollWheelZoom={false}
-                style={{ height: '100%', width: '100%', borderRadius: '0.75rem', zIndex: 0 }}>
+            <MapContainer center={[7.8731, 80.7718]} zoom={7.2} scrollWheelZoom={false} zoomControl={false}
+                style={{ height: '100%', width: '100%', zIndex: 0, background: '#F8FAFC' }}>
                 <TileLayer
-                    attribution='&copy; OpenStreetMap contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+                    url="https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
                 />
                 {filteredData && riskData.length > 0 && (
                     <GeoJSON
@@ -127,6 +130,19 @@ const SriLankaMap = ({ selectedDistrict, diseaseType }) => {
                     />
                 )}
             </MapContainer>
+
+            {/* Floating Legend */}
+            <div style={{ position: 'absolute', bottom: '20px', left: '20px', zIndex: 900, background: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(8px)', padding: '12px', borderRadius: '1rem', border: '1px solid rgba(0,0,0,0.05)', boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)' }}>
+                <p style={{ margin: '0 0 8px', fontSize: '9px', fontWeight: 900, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.1em' }}>Risk Legend</p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                    {Object.entries(RISK_COLOR).map(([label, color]) => (
+                        <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                            <div style={{ width: '10px', height: '10px', background: color, borderRadius: '3px' }}></div>
+                            <span style={{ fontSize: '9px', fontWeight: 900, color: '#475569', textTransform: 'uppercase' }}>{label}</span>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
         </div>
     );

@@ -1,49 +1,58 @@
-// components/Dashboard/StatCard.jsx
 import React from "react";
-import { ArrowUp, ArrowDown } from "lucide-react";
+import { ArrowUp, ArrowDown, Activity, TrendingUp, AlertCircle, ShieldCheck } from "lucide-react";
 import clsx from "clsx";
 
-const StatCard = ({ title, value, trend, trendValue, trendLabel, linkText, onClick, loading }) => {
+const ICONS = {
+    "Today's Caseload": Activity,
+    "Weekly Cumulative": TrendingUp,
+    "Transmission Clusters": AlertCircle,
+    "Total Fatalities": ShieldCheck
+};
+
+const StatCard = ({ title, value, trend, trendValue, trendLabel, onClick, loading }) => {
     const isPositive = trend === "up";
+    const Icon = ICONS[title] || Activity;
 
     if (loading) return (
-        <div className="bg-[#DDEDE7] rounded-xl p-4 shadow-sm flex flex-col items-center text-center animate-pulse">
-            <div className="h-3 w-24 bg-gray-300 rounded mb-3" />
-            <div className="h-8 w-16 bg-gray-300 rounded mb-2" />
-            <div className="h-3 w-20 bg-gray-200 rounded mb-4" />
-            <div className="w-full border-t border-gray-300 my-2" />
-            <div className="h-3 w-16 bg-gray-200 rounded" />
+        <div className="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm animate-pulse">
+            <div className="h-4 w-24 bg-gray-100 rounded-lg mb-4" />
+            <div className="h-10 w-32 bg-gray-200 rounded-xl" />
         </div>
     );
 
-    // Strip any existing +/- signs then format cleanly
-    const rawNum = parseFloat(String(trendValue).replace(/[^0-9.-]/g, ''));
-    const displayTrend = isNaN(rawNum)
-        ? trendValue
-        : `${rawNum > 0 ? '+' : ''}${rawNum}%`;
-
     return (
-        <div className="bg-[#DDEDE7] rounded-xl py-3 px-4 shadow-sm flex flex-col items-center text-center hover:shadow-md transition-shadow">
-            <h3 className="text-gray-500 text-[9px] uppercase tracking-widest font-bold mb-1.5">{title}</h3>
-            <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl font-extrabold text-gray-800 tracking-tight">{value}</span>
-                {trend && (
-                    <div className={clsx("p-1 rounded-md", isPositive ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600")}>
-                        {isPositive ? <ArrowUp size={14} /> : <ArrowDown size={14} />}
+        <button 
+            onClick={onClick}
+            className="bg-white rounded-[2rem] p-6 border border-gray-50 shadow-xl shadow-gray-200/20 flex flex-col gap-4 text-left hover:scale-[1.02] hover:shadow-2xl transition-all group overflow-hidden relative"
+        >
+            <div className="absolute -top-4 -right-4 w-24 h-24 bg-gray-50 rounded-full group-hover:bg-[#2F6A5F]/5 transition-colors"></div>
+            
+            <div className="flex items-center justify-between relative z-10">
+                <div className={clsx(
+                    "w-10 h-10 rounded-xl flex items-center justify-center transition-colors",
+                    isPositive ? "bg-red-50 text-red-500" : "bg-[#2F6A5F]/10 text-[#2F6A5F]"
+                )}>
+                    <Icon size={20} />
+                </div>
+                {trendValue && (
+                    <div className={clsx(
+                        "flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-black tracking-tight",
+                        isPositive ? "bg-red-50 text-red-600" : "bg-green-50 text-green-600"
+                    )}>
+                        {isPositive ? <ArrowUp size={10} /> : <ArrowDown size={10} />}
+                        {trendValue}
                     </div>
                 )}
             </div>
-            <div className="text-xs text-gray-500 mb-4 flex items-center gap-1">
-                <span className={clsx("font-medium", isPositive ? "text-green-600" : "text-red-600")}>
-                    {displayTrend}
-                </span>
-                <span>{trendLabel}</span>
+
+            <div className="relative z-10">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1">{title}</p>
+                <div className="flex items-baseline gap-2">
+                    <span className="text-3xl font-black text-[#1A3D37] tracking-tight">{value}</span>
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">{trendLabel}</span>
+                </div>
             </div>
-            <div className="w-full border-t border-gray-300 my-2" />
-            <button onClick={onClick} className="text-sm text-gray-600 hover:text-[#2F6A5F] font-medium transition-colors">
-                {linkText}
-            </button>
-        </div>
+        </button>
     );
 };
 

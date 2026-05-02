@@ -70,8 +70,6 @@ const EMPTY = {
     diseaseType: 'dengue',
     caseCount: '', // Total for MOH
     suspectedCount: '', // For Hospital
-    confirmedNS1: '',
-    confirmedIgM: '',
     deathCount: '0',
     severityLevel: 'moderate',
     reportedAt: new Date().toISOString().split('T')[0],
@@ -79,7 +77,6 @@ const EMPTY = {
     // Hospital Specifics
     admissions: '',
     warningSignsCount: '',
-    severeDengueCount: '',
 
     // MOH Specifics
     dfCount: '',
@@ -203,15 +200,15 @@ export default function UploadHealthDataModal({ onClose }) {
             // Unified Case Counts
             caseCount: Number(form.caseCount || form.admissions || 0),
             suspectedCount: Number(form.suspectedCount || 0),
-            confirmedCount: Number(form.confirmedNS1 || 0) + Number(form.confirmedIgM || 0),
-            confirmedNS1: Number(form.confirmedNS1 || 0),
-            confirmedIgM: Number(form.confirmedIgM || 0),
+            confirmedCount: 0,
+            confirmedNS1: 0,
+            confirmedIgM: 0,
             deathCount: Number(form.deathCount) || 0,
 
             // Clinical
             dfCount: Number(form.dfCount || 0),
             dhfCount: Number(form.dhfCount || 0),
-            severeDengueCount: Number(form.severeDengueCount || 0),
+            severeDengueCount: 0,
             warningSignsCount: Number(form.warningSignsCount || 0),
 
             // Demographics
@@ -352,21 +349,10 @@ export default function UploadHealthDataModal({ onClose }) {
                                         </Field>
                                     </div>
                                     <div className="grid grid-cols-2 gap-6 pt-2">
-                                        <Field label="Lab Verified (NS1)" helper="Rapid NS1 Antigen Positive">
-                                            <input type="number" className={inputCls} placeholder="0" value={form.confirmedNS1} onChange={e => set('confirmedNS1', e.target.value)} />
-                                        </Field>
-                                        <Field label="Lab Verified (IgM)" helper="Serology Positive">
-                                            <input type="number" className={inputCls} placeholder="0" value={form.confirmedIgM} onChange={e => set('confirmedIgM', e.target.value)} />
+                                        <Field label="Fatalities" helper="Dengue related deaths">
+                                            <input type="number" className={inputCls} placeholder="0" value={form.deathCount} onChange={e => set('deathCount', e.target.value)} />
                                         </Field>
                                     </div>
-                                </div>
-                                <div className="grid grid-cols-2 gap-6">
-                                    <Field label="Severe / DHF Cases" helper="DHF Grades I-IV">
-                                        <input type="number" className={inputCls} placeholder="0" value={form.severeDengueCount} onChange={e => set('severeDengueCount', e.target.value)} />
-                                    </Field>
-                                    <Field label="Fatalities" helper="Dengue related deaths">
-                                        <input type="number" className={inputCls} placeholder="0" value={form.deathCount} onChange={e => set('deathCount', e.target.value)} />
-                                    </Field>
                                 </div>
                             </div>
                         )}

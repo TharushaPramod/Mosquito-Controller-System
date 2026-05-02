@@ -5,7 +5,7 @@ import Footer from './Footer';
 import NavigationTabs from './NavigationTabs';
 import clsx from 'clsx';
 
-const DashboardLayout = ({ children, title }) => {
+const DashboardLayout = ({ children, title, hideHeaderTitle, hideHeaderDateTime }) => {
     const [isSidebarOpen, setIsSidebarOpen] = useState(true);
 
     return (
@@ -21,7 +21,7 @@ const DashboardLayout = ({ children, title }) => {
                     isSidebarOpen ? "ml-64" : "ml-20"
                 )}
             >
-                <Header title={title} />
+                <Header title={hideHeaderTitle ? null : title} hideDateTime={hideHeaderDateTime} />
                 <NavigationTabs />
                 <main className="flex-1 p-4 overflow-y-auto">
                     {children}

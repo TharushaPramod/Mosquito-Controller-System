@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Bell, Calendar, ChevronDown, User } from 'lucide-react';
 
-const Header = ({ title }) => {
+const Header = ({ title, hideDateTime }) => {
     const [now, setNow] = useState(new Date());
 
     useEffect(() => {
@@ -51,10 +51,12 @@ const Header = ({ title }) => {
                 </div>
 
                 {/* Live Date & Time */}
-                <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 text-sm font-medium shadow-sm">
-                    <Calendar size={16} className="text-[#2F6A5F]" />
-                    <span>{formatted}</span>
-                </div>
+                {!hideDateTime && (
+                    <div className="flex items-center gap-2 px-4 py-2 bg-white rounded-lg border border-gray-200 text-gray-600 text-sm font-medium shadow-sm">
+                        <Calendar size={16} className="text-[#2F6A5F]" />
+                        <span>{formatted}</span>
+                    </div>
+                )}
             </div>
         </header>
     );
