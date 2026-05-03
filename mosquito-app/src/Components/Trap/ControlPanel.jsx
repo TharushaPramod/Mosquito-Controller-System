@@ -7,7 +7,15 @@ import { api } from "../../lib/api";
 
 export const ControlPanel = ({ className }) => {
     const [loading, setLoading] = useState(false);
-    const [settings, setSettings] = useState(null);
+    const [settings, setSettings] = useState({
+        mode: 'auto',
+        co2_enabled: true,
+        co2_on_duration: 0,
+        co2_off_interval: 60,
+        net_duration: 5,
+        fan_duration: 0,
+        confidence_threshold: 0.5
+    });
 
     // Dummy states for UI feedback
     const [fanState, setFanState] = useState(false);
@@ -21,18 +29,10 @@ export const ControlPanel = ({ className }) => {
     const fetchSettings = async () => {
         try {
             const s = await api.getSettings();
-            setSettings(s);
+            setSettings({ ...s, mode: 'auto' });
         } catch (e) {
-            console.error("Using mock settings:", e);
-            setSettings({
-                mode: 'auto',
-                co2_enabled: true,
-                co2_on_duration: 10,
-                co2_off_interval: 10,
-                net_duration: 5,
-                fan_duration: 5,
-                confidence_threshold: 0.5
-            });
+            console.error("Using default settings:", e);
+            setSettings(prev => ({ ...prev, mode: 'auto' }));
         }
     }
 
@@ -51,15 +51,19 @@ export const ControlPanel = ({ className }) => {
     };
 
     const setMode = async (newMode) => {
-        if (!settings) return;
-        // Optimistic update for instant feedback
-        setSettings(prev => ({ ...prev, mode: newMode }));
-
+        // Immediately update UI — don't wait for API
+        setSettings(prev => prev
+            ? { ...prev, mode: newMode }
+            : {
+                mode: newMode, co2_enabled: true, co2_on_duration: 10,
+                co2_off_interval: 10, net_duration: 5, fan_duration: 5,
+                confidence_threshold: 0.5
+            }
+        );
         try {
             await api.updateSettings({ mode: newMode });
         } catch (e) {
-            console.error("API failed, using local state", e);
-            // Optionally revert here if strictly needed, but better to keep UI responsive
+            console.error("Settings API failed (UI already updated):", e);
         }
     }
 
@@ -79,10 +83,9 @@ export const ControlPanel = ({ className }) => {
             const now = new Date();
             const hour = now.getHours();
 
-            // Peak Mosquito Times: 6am-8am and 6pm-7pm (18:00-19:00)
-            const isMorningPeak = hour >= 6 && hour < 8;
-            const isEveningPeak = hour >= 18 && hour < 19;
-            const isPeakTime = isMorningPeak || isEveningPeak;
+            // Define Time Periods (24h logical coverage)
+            const isPeakTime = (hour >= 5 && hour < 8) || (hour >= 17 && hour < 20); // 5 AM - 8 AM and 5 PM - 8 PM
+            const isNight = hour >= 20 || hour < 5; // 8 PM to 5 AM
 
             // Define Release Strategies
             const peakSettings = {
@@ -90,16 +93,24 @@ export const ControlPanel = ({ className }) => {
                 co2_off_interval: 5,
                 fan_duration: 120
             };
-            const normalSettings = {
-                co2_on_duration: 5,
-                co2_off_interval: 30,
-                fan_duration: 30
+            const nightSettings = {
+                co2_on_duration: 15,
+                co2_off_interval: 15,
+                fan_duration: 60
+            };
+            const standbySettings = {
+                co2_on_duration: 0,
+                co2_off_interval: 60,
+                fan_duration: 0
             };
 
-            const targetSettings = isPeakTime ? peakSettings : normalSettings;
+            let targetSettings = standbySettings;
+            if (isPeakTime) targetSettings = peakSettings;
+            else if (isNight) targetSettings = nightSettings;
 
             if (settings.co2_on_duration !== targetSettings.co2_on_duration ||
-                settings.fan_duration !== targetSettings.fan_duration) {
+                settings.fan_duration !== targetSettings.fan_duration ||
+                settings.co2_off_interval !== targetSettings.co2_off_interval) {
                 setSettings(prev => ({ ...prev, ...targetSettings }));
                 api.updateSettings(targetSettings).catch(e => console.error("Auto sync failed:", e));
             }
@@ -184,7 +195,7 @@ export const ControlPanel = ({ className }) => {
                     <Clock className="text-[var(--navbar)]" />
                     Automation Settings
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
                     {/* CO2 Logic */}
                     <div className="p-4 rounded-lg bg-white/40 border border-white/40">
                         <div className="flex items-center justify-between mb-4">
@@ -204,16 +215,20 @@ export const ControlPanel = ({ className }) => {
                                     <label className="text-xs text-[var(--foreground)] opacity-70 block mb-2 font-bold uppercase">Schedule Configuration</label>
                                     <div className="space-y-2">
                                         <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-emerald-100">
-                                            <div className="font-mono text-gray-600">06:00 - 07:00</div>
+                                            <div className="font-mono text-gray-600">05:00 AM - 08:00 AM</div>
                                             <div className="font-bold text-emerald-600">100% Release</div>
                                         </div>
                                         <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-gray-200">
-                                            <div className="font-mono text-gray-600">07:00 - 16:00</div>
-                                            <div className="font-bold text-blue-600">50% Release</div>
-                                        </div>
-                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-gray-200">
-                                            <div className="font-mono text-gray-600">16:00 - 18:00</div>
+                                            <div className="font-mono text-gray-600">08:00 AM - 05:00 PM</div>
                                             <div className="font-bold text-gray-500">Standby</div>
+                                        </div>
+                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-emerald-100">
+                                            <div className="font-mono text-gray-600">05:00 PM - 08:00 PM</div>
+                                            <div className="font-bold text-emerald-600">100% Release</div>
+                                        </div>
+                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-blue-100">
+                                            <div className="font-mono text-gray-600">08:00 PM - 05:00 AM</div>
+                                            <div className="font-bold text-blue-600">50% Release</div>
                                         </div>
                                     </div>
                                 </div>
@@ -248,30 +263,7 @@ export const ControlPanel = ({ className }) => {
                         </div>
                     </div>
 
-                    {/* Kill Logic */}
-                    <div className="p-4 rounded-lg bg-white/40 border border-white/40">
-                        <span className="text-sm font-bold text-[var(--table-heading)] block mb-4">Detection Response</span>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="text-xs text-[var(--foreground)] opacity-70 block mb-1">Net Zap Duration (s)</label>
-                                <input
-                                    type="number"
-                                    value={settings?.net_duration || 0}
-                                    onChange={(e) => updateSetting('net_duration', parseInt(e.target.value))}
-                                    className="w-full bg-white border border-gray-300 rounded px-3 py-2 text-[var(--foreground)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--navbar)]"
-                                />
-                            </div>
-                            <div>
-                                <label className="text-xs text-[var(--foreground)] opacity-70 block mb-1">Fan Eject Duration (s)</label>
-                                <input
-                                    type="number"
-                                    value={settings?.fan_duration || 0}
-                                    onChange={(e) => updateSetting('fan_duration', parseInt(e.target.value))}
-                                    className="w-full bg-white border border-gray-300 rounded px-3 py-2 text-[var(--foreground)] text-sm focus:outline-none focus:ring-2 focus:ring-[var(--navbar)]"
-                                />
-                            </div>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>

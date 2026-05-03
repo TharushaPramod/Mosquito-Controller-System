@@ -1,0 +1,17 @@
+[Unit]
+Description=Mosquito Pi — Hardware Control Backend
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+# Change 'tharusha' if your Pi username is different
+User=tharusha
+WorkingDirectory=/home/tharusha/mosquito-backend-pi
+ExecStart=/usr/bin/python3 /home/tharusha/mosquito-backend-pi/app.py
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

@@ -1,25 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { ControlPanel } from '../Components/Trap/ControlPanel';
 import { CpuTempDisplay } from '../Components/Trap/CpuTempDisplay';
-import { SensorDisplay } from '../Components/Trap/SensorDisplay';
 import AllLayout from '../Components/Layout/AllLayout';
 
 const AIRecommendation = () => {
-  const [trapData, setTrapData] = useState([]);
+  const [trapData, setTrapData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch("http://localhost:5002/api/traps/control")  // ← no district, gets all
+    fetch("http://localhost:5002/api/traps/control/Colombo")
       .then(r => r.json())
       .then(d => {
         if (d.success && d.data?.length > 0) {
-          setTrapData(d.data);
+          setTrapData(d.data[0]);
         }
         setLoading(false);
       })
       .catch(e => {
-        setError("Could not load AI recommendation");
+        setError("Could not load recommendation");
         setLoading(false);
       });
   }, []);
@@ -36,33 +35,28 @@ const AIRecommendation = () => {
     <div className="p-4 rounded-xl border border-gray-200 bg-gray-50 mb-6 animate-pulse h-20" />
   );
 
-  if (error || !trapData.length) return (
+  if (error || !trapData) return (
     <div className="p-4 rounded-xl border border-red-200 bg-red-50 text-red-600 text-sm mb-6">
-      ⚠ {error || "No AI recommendation available"}
+      ⚠ {error || "No recommendation available"}
     </div>
   );
 
-  // Show top 3 highest risk districts
-  const top3 = trapData.slice(0, 3);
-
   return (
-    <div className="mb-6">
-      <h3 className="font-bold text-sm uppercase tracking-wider mb-3 text-gray-600">
-        🤖 ML Prediction Based Trap Recommendations
+    <div className={`p-4 rounded-xl border ${colorMap[trapData.statusColor] || colorMap.green} mb-6`}>
+      <h3 className="font-bold text-sm uppercase tracking-wider mb-3">
+        🤖 ML Prediction Based Trap Recommendation
       </h3>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-        {top3.map((d, i) => (
-          <div key={i} className={`p-4 rounded-xl border ${colorMap[d.statusColor] || colorMap.green}`}>
-            <div className="flex items-center justify-between mb-2">
-              <span className="font-bold text-xs uppercase">{d.district}</span>
-              <span className="text-xs font-semibold">{d.dengueRisk}</span>
-            </div>
-            <p className="text-2xl font-black">{d.co2Level}% CO₂</p>
-            <p className="text-xs font-semibold mt-1">{d.trapStatus}</p>
-            <p className="text-xs mt-1 opacity-70">{d.recommendedAction}</p>
-            <p className="text-[10px] mt-2 opacity-50">Week {d.weekNumber}</p>
-          </div>
-        ))}
+      <div className="flex items-center justify-between flex-wrap gap-4">
+        <div>
+          <p className="text-3xl font-black">{trapData.co2Level}% CO₂</p>
+          <p className="text-sm font-semibold mt-1">{trapData.trapStatus}</p>
+          <p className="text-xs mt-1 opacity-70">{trapData.recommendedAction}</p>
+        </div>
+        <div className="text-right text-xs space-y-1">
+          <p>Dengue Risk: <strong>{trapData.dengueRisk}</strong></p>
+          <p>District: <strong>{trapData.district}</strong></p>
+          <p>Week: <strong>{trapData.weekNumber}</strong></p>
+        </div>
       </div>
     </div>
   );
@@ -95,11 +89,11 @@ function DeviceControll() {
             </div>
           </header>
 
-          {/* AI Recommendation Banner */}
+          {/* AI Recommendation */}
           <AIRecommendation />
 
           {/* Status Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch">
             <div className="bg-[var(--card-bg)] p-6 rounded-xl border border-white/20 shadow-sm flex flex-col justify-center">
               <h2 className="text-xl font-bold text-[var(--foreground)] mb-4">System Status</h2>
               <div className="flex items-center justify-between">
@@ -110,13 +104,10 @@ function DeviceControll() {
             <div className="h-full">
               <CpuTempDisplay className="w-full h-full min-h-[140px]" />
             </div>
-            <div className="h-full">
-              <SensorDisplay className="w-full h-full min-h-[140px]" />
-            </div>
           </div>
 
-          {/* Bottom Grid: Controls */}
-          <div className="grid grid-cols-1">
+          {/* Controls */}
+          <div className="flex flex-col gap-6">
             <ControlPanel />
           </div>
 
