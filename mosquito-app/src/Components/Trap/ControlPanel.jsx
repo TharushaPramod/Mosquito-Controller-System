@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from 'react';
 import { cn } from "../../lib/utils";
 import { Fan, Zap, Wind, ShieldAlert, Clock } from 'lucide-react';
@@ -7,8 +5,9 @@ import { api } from "../../lib/api";
 
 export const ControlPanel = ({ className }) => {
     const [loading, setLoading] = useState(false);
+    // mode is kept SEPARATE so fetchSettings never overwrites the user's choice
+    const [mode, setModeState] = useState('auto');
     const [settings, setSettings] = useState({
-        mode: 'auto',
         co2_enabled: true,
         co2_on_duration: 0,
         co2_off_interval: 60,
@@ -17,7 +16,7 @@ export const ControlPanel = ({ className }) => {
         confidence_threshold: 0.5
     });
 
-    // Dummy states for UI feedback
+    // Component on/off states
     const [fanState, setFanState] = useState(false);
     const [netState, setNetState] = useState(false);
     const [valveState, setValveState] = useState(false);
@@ -29,37 +28,32 @@ export const ControlPanel = ({ className }) => {
     const fetchSettings = async () => {
         try {
             const s = await api.getSettings();
-            setSettings({ ...s, mode: 'auto' });
+            // Only sync non-mode settings — mode is controlled by the user buttons only
+            const { mode: _ignore, ...rest } = s;
+            setSettings(prev => ({ ...prev, ...rest }));
         } catch (e) {
-            console.error("Using default settings:", e);
-            setSettings(prev => ({ ...prev, mode: 'auto' }));
+            console.error("Using default settings (backend unavailable):", e);
         }
     }
 
     const toggleComponent = async (component, currentState, setter) => {
+        // Update UI immediately — don't wait for API
+        setter(!currentState);
+        setLoading(true);
         try {
-            setLoading(true);
             const action = currentState ? "off" : "on";
             await api.controlComponent(component, action);
-            setter(!currentState);
         } catch (error) {
-            console.error(error);
-            alert(`Failed to toggle ${component}`);
+            // Log error but keep UI state — don't block the user
+            console.error(`Failed to send ${component} command to Pi:`, error);
         } finally {
             setLoading(false);
         }
     };
 
     const setMode = async (newMode) => {
-        // Immediately update UI — don't wait for API
-        setSettings(prev => prev
-            ? { ...prev, mode: newMode }
-            : {
-                mode: newMode, co2_enabled: true, co2_on_duration: 10,
-                co2_off_interval: 10, net_duration: 5, fan_duration: 5,
-                confidence_threshold: 0.5
-            }
-        );
+        // Update mode state immediately — fully independent from settings
+        setModeState(newMode);
         try {
             await api.updateSettings({ mode: newMode });
         } catch (e) {
@@ -77,7 +71,7 @@ export const ControlPanel = ({ className }) => {
 
     // Automation Logic (Real-time)
     useEffect(() => {
-        if (!settings || settings.mode !== 'auto') return;
+        if (mode !== 'auto') return;
 
         const checkTimeAndAdjust = () => {
             const now = new Date();
@@ -119,7 +113,7 @@ export const ControlPanel = ({ className }) => {
         checkTimeAndAdjust();
         const timer = setInterval(checkTimeAndAdjust, 10000); // Check every 10s
         return () => clearInterval(timer);
-    }, [settings?.mode]);
+    }, [mode]);
 
     return (
         <div className="space-y-6">
@@ -131,12 +125,15 @@ export const ControlPanel = ({ className }) => {
                         System Control
                     </h2>
                     {/* Mode Toggle Buttons */}
-                    <div className="flex bg-gray-100 p-1 rounded-full border border-gray-200">
+                    <div className="flex p-1 bg-gray-100 border border-gray-200 rounded-full">
                         <button
-                            onClick={() => setMode('auto')}
+                            onClick={() => {
+                                setModeState('auto');
+                                api.updateSettings({ mode: 'auto' }).catch(() => {});
+                            }}
                             className={cn(
                                 "px-6 py-2 text-sm font-bold rounded-full transition-all uppercase tracking-wide",
-                                settings?.mode === "auto"
+                                mode === "auto"
                                     ? "bg-emerald-500 text-white shadow-md"
                                     : "text-gray-500 hover:text-gray-700"
                             )}
@@ -144,10 +141,13 @@ export const ControlPanel = ({ className }) => {
                             AUTO MODE
                         </button>
                         <button
-                            onClick={() => setMode('manual')}
+                            onClick={() => {
+                                setModeState('manual');
+                                api.updateSettings({ mode: 'manual' }).catch(() => {});
+                            }}
                             className={cn(
                                 "px-6 py-2 text-sm font-bold rounded-full transition-all uppercase tracking-wide",
-                                settings?.mode === "manual"
+                                mode === "manual"
                                     ? "bg-emerald-500 text-white shadow-md"
                                     : "text-gray-500 hover:text-gray-700"
                             )}
@@ -157,13 +157,13 @@ export const ControlPanel = ({ className }) => {
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                     <ControlButton
                         label="Ejection Fans"
                         icon={<Fan className={cn("w-6 h-6", fanState && "animate-spin")} />}
                         active={fanState}
                         onClick={() => toggleComponent('fan', fanState, setFanState)}
-                        disabled={settings?.mode === 'auto'}
+                        disabled={mode === 'auto'}
                         color="blue"
                     />
                     <ControlButton
@@ -171,7 +171,7 @@ export const ControlPanel = ({ className }) => {
                         icon={<Zap className="w-6 h-6" />}
                         active={netState}
                         onClick={() => toggleComponent('net', netState, setNetState)}
-                        disabled={settings?.mode === 'auto'}
+                        disabled={mode === 'auto'}
                         color="red"
                     />
                     <ControlButton
@@ -179,10 +179,10 @@ export const ControlPanel = ({ className }) => {
                         icon={<Wind className="w-6 h-6" />}
                         active={valveState}
                         onClick={() => toggleComponent('valve', valveState, setValveState)}
-                        disabled={settings?.mode === 'auto'}
+                        disabled={mode === 'auto'}
                         color="purple"
                     />
-                    <div className="p-4 bg-white/40 rounded-xl border border-white/50 flex flex-col items-center justify-center text-center shadow-sm">
+                    <div className="flex flex-col items-center justify-center p-4 text-center border shadow-sm bg-white/40 rounded-xl border-white/50">
                         <span className="text-xs text-[var(--foreground)] opacity-70 uppercase font-semibold mb-2">Detection</span>
                         <div className="text-2xl font-bold text-[var(--navbar)]">READY</div>
                     </div>
@@ -195,9 +195,9 @@ export const ControlPanel = ({ className }) => {
                     <Clock className="text-[var(--navbar)]" />
                     Automation Settings
                 </h3>
-                <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+                <div className="grid grid-cols-1 gap-6 md:grid-cols-1">
                     {/* CO2 Logic */}
-                    <div className="p-4 rounded-lg bg-white/40 border border-white/40">
+                    <div className="p-4 border rounded-lg bg-white/40 border-white/40">
                         <div className="flex items-center justify-between mb-4">
                             <span className="text-sm font-bold text-[var(--table-heading)]">CO₂ Cycle</span>
                             <div
@@ -210,23 +210,23 @@ export const ControlPanel = ({ className }) => {
 
                         <div className="space-y-4">
                             {/* Schedule Slots (Visible in Auto Mode) */}
-                            {settings?.mode === 'auto' && (
-                                <div className="bg-white/50 rounded-lg p-3">
+                            {mode === 'auto' && (
+                                <div className="p-3 rounded-lg bg-white/50">
                                     <label className="text-xs text-[var(--foreground)] opacity-70 block mb-2 font-bold uppercase">Schedule Configuration</label>
                                     <div className="space-y-2">
-                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-emerald-100">
+                                        <div className="flex items-center justify-between p-2 text-xs bg-white border rounded border-emerald-100">
                                             <div className="font-mono text-gray-600">05:00 AM - 08:00 AM</div>
                                             <div className="font-bold text-emerald-600">100% Release</div>
                                         </div>
-                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-gray-200">
+                                        <div className="flex items-center justify-between p-2 text-xs bg-white border border-gray-200 rounded">
                                             <div className="font-mono text-gray-600">08:00 AM - 05:00 PM</div>
                                             <div className="font-bold text-gray-500">Standby</div>
                                         </div>
-                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-emerald-100">
+                                        <div className="flex items-center justify-between p-2 text-xs bg-white border rounded border-emerald-100">
                                             <div className="font-mono text-gray-600">05:00 PM - 08:00 PM</div>
                                             <div className="font-bold text-emerald-600">100% Release</div>
                                         </div>
-                                        <div className="flex items-center justify-between text-xs bg-white p-2 rounded border border-blue-100">
+                                        <div className="flex items-center justify-between p-2 text-xs bg-white border border-blue-100 rounded">
                                             <div className="font-mono text-gray-600">08:00 PM - 05:00 AM</div>
                                             <div className="font-bold text-blue-600">50% Release</div>
                                         </div>
@@ -235,8 +235,8 @@ export const ControlPanel = ({ className }) => {
                             )}
 
                             {/* Manual Intensities (Visible in Manual Mode) */}
-                            {settings?.mode === 'manual' && (
-                                <div className="border-t border-black/5 pt-4">
+                            {mode === 'manual' && (
+                                <div className="pt-4 border-t border-black/5">
                                     <label className="text-xs text-[var(--foreground)] opacity-70 block mb-3 font-bold uppercase">Manual Intensities</label>
                                     <div className="grid grid-cols-2 gap-3">
                                         <div>

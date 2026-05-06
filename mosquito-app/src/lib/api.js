@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:5000";
+const API_BASE_URL = "/pi-api";
 
 export const api = {
     getSettings: async () => {
@@ -36,6 +36,16 @@ export const api = {
             return await res.json();
         } catch (error) {
             console.warn("API Error (controlComponent):", error);
+            throw error;
+        }
+    },
+    getSystemStatus: async () => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/status`);
+            if (!res.ok) throw new Error("Failed to fetch system status");
+            return await res.json();
+        } catch (error) {
+            console.warn("API Error (getSystemStatus):", error);
             throw error;
         }
     }

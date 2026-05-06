@@ -13,4 +13,13 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  server: {
+    proxy: {
+      '/pi-api': {
+        target: 'http://10.185.135.135:5001',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/pi-api/, ''),
+      }
+    }
+  }
 })
